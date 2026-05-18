@@ -1,5 +1,5 @@
 {
-  "$id": "https://standard.makeitseo.io/v0.1/audit-report.schema.json",
+  "$id": "https://standard.fixmyseo.io/v0.1/audit-report.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": true,
   "allOf": [

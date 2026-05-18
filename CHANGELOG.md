@@ -1,4 +1,4 @@
-# Changelog — MakeitSEO Standards Programme
+# Changelog — FixMySEO Standards Programme
 
 All notable changes to this standards programme are documented in this file.
 
@@ -9,7 +9,7 @@ Specifications use a `v{major}.{minor}` version scheme (see GOVERNANCE.md §3).
 
 ## [v0.1] — 2026-05-12
 
-### Initial publication of the MakeitSEO Standards Programme
+### Initial publication of the FixMySEO Standards Programme
 
 This release publishes the first set of normative specifications for measuring website visibility across traditional search, answer engines, and AI-generated responses.
 
@@ -17,7 +17,7 @@ This release publishes the first set of normative specifications for measuring w
 
 | Specification | Path | Summary |
 |---------------|------|---------|
-| MakeitSEO Standard | `STANDARD.md` | Three-pillar framework (SEO / AEO / GEO) with overall score = arithmetic mean |
+| FixMySEO Standard | `STANDARD.md` | Three-pillar framework (SEO / AEO / GEO) with overall score = arithmetic mean |
 | SEO Scoring | `seo-scoring/v0.1.md` | 6 sub-scores: content quality (30%), technical health (25%), authority signals (22%), content freshness (10%), runtime compatibility (8%), brand mentions (3%) |
 | AEO Scoring | `aeo-scoring/v0.1.md` | 5 sub-scores: AIO presence (40%), featured snippet (25%), knowledge panel (15%), PAA (10%), runtime compatibility (10%) |
 | GEO Scoring | `geo-scoring/v0.1.md` | 8 sub-scores: citation rate (20%), brand mentions (15%), mention share (10%), content freshness (10%), platform affinity (10%), structured content (10%), AI crawler (10%), runtime compatibility (15%) |
@@ -35,8 +35,8 @@ This release publishes the first set of normative specifications for measuring w
 #### Structural artefacts published
 
 - `audit-report.schema.json` — JSON Schema for conformant audit output
-- `STANDARD.md` — human-readable overview of the MakeitSEO Standard
-- `VALIDATOR.md` — documentation for the `@makeitseo/standard` CLI validator
+- `STANDARD.md` — human-readable overview of the FixMySEO Standard
+- `VALIDATOR.md` — documentation for the `@fixmyseo/standard` CLI validator
 - `README.md` — programme introduction and quick-start
 - `CONTRIBUTING.md` — contribution guide (editor-led model at v0.1)
 - `CODE_OF_CONDUCT.md` — Contributor Covenant 2.1
@@ -56,7 +56,7 @@ This release publishes the first set of normative specifications for measuring w
 
 #### Reference implementation
 
-The MakeitSEO audit engine at [makeitseo.com](https://makeitseo.com) is the designated reference implementation of this standard as of v0.1.
+The FixMySEO audit engine at [fixmyseo.com](https://fixmyseo.com) is the designated reference implementation of this standard as of v0.1.
 
 ---
 

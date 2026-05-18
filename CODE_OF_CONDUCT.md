@@ -2,7 +2,7 @@
 
 ## Our pledge
 
-The MakeitSEO Standards Programme is a technical project. We are here to build better open specifications for measuring website visibility in search engines and AI systems. We expect everyone who participates — contributors, reviewers, implementers, and observers — to behave professionally, argue with evidence, and treat disagreement as a signal to reason more carefully rather than a provocation to escalate.
+The FixMySEO Standards Programme is a technical project. We are here to build better open specifications for measuring website visibility in search engines and AI systems. We expect everyone who participates — contributors, reviewers, implementers, and observers — to behave professionally, argue with evidence, and treat disagreement as a signal to reason more carefully rather than a provocation to escalate.
 
 This Code of Conduct applies to all project spaces: GitHub Issues, pull requests, discussions, and any other channel where the programme is being worked on.
 
@@ -39,7 +39,7 @@ This Code of Conduct applies in all project spaces and when an individual is rep
 
 Instances of unacceptable behaviour may be reported to the project maintainer:
 
-**Daniel Titton — daniel@makeitseo.io**
+**Daniel Titton — daniel@fixmyseo.io**
 
 All reports will be reviewed promptly. The maintainer is obligated to maintain confidentiality with regard to the reporter. Reports about the maintainer may be submitted to Cloud WiFi Limited at the company address on record with Companies House (UK Co. No. 13521157).
 
@@ -61,4 +61,4 @@ This Code of Conduct is adapted from the [Contributor Covenant](https://www.cont
 
 ---
 
-*MakeitSEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*
+*FixMySEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*

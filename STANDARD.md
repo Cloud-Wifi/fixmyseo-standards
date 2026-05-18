@@ -7,8 +7,8 @@ description: >
 license: CC-BY-4.0
 published: 2026-04-23
 editor: Cloud WiFi Limited
-repository: https://github.com/cloud-wifi/makeitseo-standard
-canonical_url: https://standard.makeitseo.io
+repository: https://github.com/cloud-wifi/fixmyseo-standard
+canonical_url: https://standard.fixmyseo.io
 
 pillars:
   seo:
@@ -867,7 +867,7 @@ The gap between 95 and 100 is the gap between this standard and the truth. It is
 
 ## 7. Audit report format
 
-The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema exported from this specification at `standard.makeitseo.io/v0.1/audit-report.schema.json`. This section describes the shape informally.
+The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema exported from this specification at `standard.fixmyseo.io/v0.1/audit-report.schema.json`. This section describes the shape informally.
 
 ### 7.1 Top-level structure
 
@@ -878,7 +878,7 @@ The audit report is a single JSON document. Its canonical shape is defined by th
   "audited_url": "https://example.com/page",
   "timestamp": "2026-04-23T10:30:00Z",
   "implementation": {
-    "name": "MakeitSEO Reference Engine",
+    "name": "FixMySEO Reference Engine",
     "version": "1.0.0"
   },
   "checks": {
@@ -972,17 +972,17 @@ Implementations MUST declare the `standard_version` against which they produce a
 
 ### 10.1 The validator
 
-Conformance is established mechanically by the validator published at `@makeitseo/standard` on npm. The validator takes an audit report and produces a structured finding report. Zero errors at the declared level equals conformance at that level.
+Conformance is established mechanically by the validator published at `@fixmyseo/standard` on npm. The validator takes an audit report and produces a structured finding report. Zero errors at the declared level equals conformance at that level.
 
 ```bash
-npx @makeitseo/standard lint --level standard my-audit.json
+npx @fixmyseo/standard lint --level standard my-audit.json
 ```
 
 Exit code 0 indicates conformance. Exit code 1 indicates conformance failure. Exit code 2 indicates a tool error.
 
 ### 10.2 The public endpoint
 
-A hosted HTTP version of the validator is available at `validate.makeitseo.io` for non-developer users and for third-party tools that want to display a conformance badge. The endpoint is free, rate-limited, and does not require an account.
+A hosted HTTP version of the validator is available at `validate.fixmyseo.io` for non-developer users and for third-party tools that want to display a conformance badge. The endpoint is free, rate-limited, and does not require an account.
 
 ### 10.3 Claiming conformance
 
@@ -993,11 +993,11 @@ An implementation claiming AI Visibility Audit Standard conformance MUST:
 3. State the claimed level and the standard version in any public representation of conformance.
 4. Re-verify conformance within thirty days of any spec version bump that affects the implementation.
 
-An implementation MAY display the embeddable conformance badge served from `validate.makeitseo.io` if it has passed validation within the preceding thirty days. The badge links back to the validator, where anyone may re-verify the claim.
+An implementation MAY display the embeddable conformance badge served from `validate.fixmyseo.io` if it has passed validation within the preceding thirty days. The badge links back to the validator, where anyone may re-verify the claim.
 
 ### 10.4 The implementations directory
 
-A public directory of conformant implementations is maintained at `standard.makeitseo.io/implementations`. Listing is alphabetical and includes the conformance level and last-verified date. Inclusion is free. The reference implementation is listed with a marker indicating its canonical status. Competitors to the reference implementation are included on the same terms as any other implementer; this is what distinguishes a directory from a product page.
+A public directory of conformant implementations is maintained at `standard.fixmyseo.io/implementations`. Listing is alphabetical and includes the conformance level and last-verified date. Inclusion is free. The reference implementation is listed with a marker indicating its canonical status. Competitors to the reference implementation are included on the same terms as any other implementer; this is what distinguishes a directory from a product page.
 
 ---
 

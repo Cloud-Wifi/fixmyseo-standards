@@ -7,6 +7,12 @@ Specifications use a `v{major}.{minor}` version scheme (see GOVERNANCE.md §3).
 
 ---
 
+## [v0.1.2] — 2026-05-20
+
+Validator consistency patch. Brings the JSON Schema (`audit-report.schema.json`) in line with the spec content added in v0.1.1: accepts `measurement_type: connected`, `action_category` field (three permitted values), and the three new check IDs (`seo.review_signals`, `geo.review_platform_presence`, `geo.inbound_citation_velocity`).
+
+---
+
 ## [v0.1.1] — 2026-05-20
 
 Documentation updates.

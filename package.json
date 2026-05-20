@@ -1,6 +1,6 @@
 {
   "name": "@fixmyseo/standard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AI Visibility Audit Standard — JSON Schema and specification (v0.1.1)",
   "main": "index.js",
   "files": [

@@ -1292,6 +1292,12 @@ An implementation MAY declare additional directories and include them in evidenc
 
 ## Appendix B — Change log
 
+### v0.1.2 — 2026-05-20
+
+Validator consistency patch. Brings the JSON Schema in line with the spec content added in v0.1.1.
+
+---
+
 ### v0.1.1 — 2026-05-20
 
 Documentation updates.

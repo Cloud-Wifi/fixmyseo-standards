@@ -7,8 +7,8 @@ description: >
 license: CC-BY-4.0
 published: 2026-04-23
 editor: Cloud WiFi Limited
-repository: https://github.com/cloud-wifi/makeitseo-standard
-canonical_url: https://standard.makeitseo.io
+repository: https://github.com/cloud-wifi/fixmyseo-standard
+canonical_url: https://github.com/cloud-wifi/fixmyseo-standard/blob/main/STANDARD.md
 
 pillars:
   seo:
@@ -41,6 +41,7 @@ checks:
   seo.https:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: high
     detection: http_probe
     verdicts: [pass, fail, not_checked]
@@ -51,6 +52,7 @@ checks:
   seo.mobile_viewport:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: html_meta_tag
     verdicts: [pass, fail, not_checked]
@@ -62,6 +64,7 @@ checks:
   seo.title_tag:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: high
     detection: html_element
     verdicts: [pass, warning, fail, not_checked]
@@ -73,6 +76,7 @@ checks:
   seo.meta_description:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: html_meta_tag
     verdicts: [pass, warning, fail, not_checked]
@@ -84,6 +88,7 @@ checks:
   seo.canonical_url:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: html_link_tag
     verdicts: [pass, warning, fail, not_checked]
@@ -95,6 +100,7 @@ checks:
   seo.robots_indexability:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: high
     detection: composite
     verdicts: [pass, fail, not_checked]
@@ -107,6 +113,7 @@ checks:
   seo.sitemap_present:
     pillar: seo
     measurement_type: lab
+    action_category: auto_deployable
     impact: low
     detection: http_probe
     verdicts: [pass, fail, not_checked]
@@ -115,10 +122,35 @@ checks:
       An XML sitemap SHOULD be reachable at /sitemap.xml or declared in
       robots.txt via a "Sitemap:" directive.
 
+  seo.review_signals:
+    pillar: seo
+    measurement_type: connected
+    action_category: advisory
+    local_intent_only: true
+    impact: high
+    detection: gbp_api
+    verdicts: [pass, warning, fail, not_checked]
+    evidence_required:
+      - review_count
+      - review_velocity_30d
+      - average_rating
+      - rating_trend_90d
+      - response_rate
+      - response_time_hours
+    description: >
+      For local-intent businesses, Google Business Profile review health is
+      a primary signal for AI assistant citation. Review count SHOULD exceed
+      the category median. Review velocity SHOULD be positive over the
+      trailing 30 days. Average rating SHOULD be 4.0 or above. Owner response
+      rate SHOULD exceed 80%. This check is advisory: the conformant
+      implementation measures and reports but cannot solicit or post reviews
+      on the operator's behalf.
+
   aeo.faq_schema:
     pillar: aeo
     measurement_type: lab
-    impact: high
+    action_category: auto_deployable
+    impact: medium
     detection: jsonld_parse
     verdicts: [pass, warning, fail, not_checked]
     evidence_required: [schema_found, question_count]
@@ -130,6 +162,7 @@ checks:
   aeo.heading_hierarchy:
     pillar: aeo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: dom_structure
     verdicts: [pass, warning, fail, not_checked]
@@ -142,6 +175,7 @@ checks:
   aeo.direct_answer_opening:
     pillar: aeo
     measurement_type: lab
+    action_category: draft_handoff
     impact: high
     detection: content_analysis
     verdicts: [pass, warning, fail, not_checked]
@@ -154,6 +188,7 @@ checks:
   aeo.article_schema:
     pillar: aeo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: jsonld_parse
     verdicts: [pass, fail, not_checked]
@@ -166,6 +201,7 @@ checks:
   aeo.organization_schema:
     pillar: aeo
     measurement_type: lab
+    action_category: auto_deployable
     impact: low
     detection: jsonld_parse
     verdicts: [pass, fail, not_checked]
@@ -177,6 +213,7 @@ checks:
   geo.llms_txt_present:
     pillar: geo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: http_probe
     verdicts: [pass, fail, not_checked]
@@ -189,6 +226,7 @@ checks:
   geo.sameas_authority:
     pillar: geo
     measurement_type: lab
+    action_category: auto_deployable
     impact: high
     detection: jsonld_parse
     verdicts: [pass, warning, fail, not_checked]
@@ -202,6 +240,7 @@ checks:
   geo.directory_presence:
     pillar: geo
     measurement_type: lab
+    action_category: advisory
     impact: medium
     detection: external_lookup
     verdicts: [pass, warning, fail, not_checked]
@@ -215,6 +254,7 @@ checks:
   geo.about_page_depth:
     pillar: geo
     measurement_type: lab
+    action_category: draft_handoff
     impact: low
     detection: content_analysis
     verdicts: [pass, warning, fail, not_checked]
@@ -227,6 +267,7 @@ checks:
   geo.entity_consistency:
     pillar: geo
     measurement_type: lab
+    action_category: auto_deployable
     impact: medium
     detection: cross_page
     verdicts: [pass, warning, fail, not_checked]
@@ -237,6 +278,44 @@ checks:
       listings. Warning is emitted for minor variants (punctuation,
       abbreviation); fail is emitted for material divergence.
 
+  geo.review_platform_presence:
+    pillar: geo
+    measurement_type: field
+    action_category: advisory
+    impact: medium
+    detection: external_lookup
+    verdicts: [pass, warning, fail, not_checked]
+    evidence_required:
+      - platforms_checked
+      - platforms_present
+      - platforms_missing
+    description: >
+      Presence on industry-relevant third-party review platforms (Yelp,
+      TripAdvisor, Trustpilot, G2, Capterra, or sector-specific equivalents)
+      reinforces AI citation confidence. The conformant implementation checks
+      for entity presence on declared platforms and reports where the
+      business is missing. This check is advisory: the conformant
+      implementation cannot create listings on behalf of the operator.
+
+  geo.inbound_citation_velocity:
+    pillar: geo
+    measurement_type: field
+    action_category: advisory
+    impact: medium
+    detection: external_lookup
+    verdicts: [pass, warning, fail, not_checked]
+    evidence_required:
+      - citation_count_current
+      - citation_count_prior_period
+      - velocity_direction
+      - top_citing_domains
+    description: >
+      Growing inbound citation volume from authoritative third-party domains
+      is a leading indicator of AI citation inclusion. This check is
+      advisory: the conformant implementation measures and trends citation
+      velocity but cannot generate off-site citations on behalf of the
+      operator.
+
 conformance_levels:
   minimal:
     description: One check, one valid verdict.
@@ -246,7 +325,7 @@ conformance_levels:
       - timestamp
       - checks
   standard:
-    description: All 17 launch checks present with valid verdicts.
+    description: All 20 launch checks present with valid verdicts.
     required:
       - standard_version
       - audited_url
@@ -258,6 +337,7 @@ conformance_levels:
       - checks.seo.canonical_url
       - checks.seo.robots_indexability
       - checks.seo.sitemap_present
+      - checks.seo.review_signals
       - checks.aeo.faq_schema
       - checks.aeo.heading_hierarchy
       - checks.aeo.direct_answer_opening
@@ -268,6 +348,8 @@ conformance_levels:
       - checks.geo.directory_presence
       - checks.geo.about_page_depth
       - checks.geo.entity_consistency
+      - checks.geo.review_platform_presence
+      - checks.geo.inbound_citation_velocity
   full:
     description: Standard plus complete evidence, scoring, methodology metadata, and source attribution.
     required:
@@ -304,7 +386,7 @@ The standard exists because the current state of AI visibility measurement is ma
 This standard covers:
 
 - The machine-readable structure of a conformant audit report.
-- Seventeen named checks grouped into three pillars — SEO, AEO, and GEO.
+- Twenty named checks grouped into three pillars — SEO, AEO, and GEO.
 - The detection methods, verdict rules, and evidence requirements for each check.
 - A scoring methodology that converts verdicts into per-pillar and overall scores.
 - Three conformance levels: minimal, standard, and full.
@@ -341,6 +423,8 @@ The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RE
 
 ### 2.2 Glossary
 
+**Action category.** The default actionability of a check's finding for the reference implementation. One of `auto_deployable` (the implementation detects, deploys the fix, and verifies without customer intervention), `draft_handoff` (the implementation detects and drafts the fix; the customer reviews and publishes), or `advisory` (the implementation detects and quantifies the problem; the customer must act externally to resolve it). This field is informative, not normative. Implementations MAY override at the finding level if runtime conditions change the category.
+
 **Audit report.** A structured document, conformant to this standard, describing the outcome of running the defined checks against a single URL at a single point in time.
 
 **Check.** A named, versioned unit of measurement defined in the front matter of this standard under the `checks` key. Each check produces a single verdict for a single URL.
@@ -353,7 +437,7 @@ The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RE
 
 **Impact band.** The weight applied to a check when computing scores. One of `high` (20 points), `medium` (10 points), or `low` (5 points).
 
-**Measurement type.** The category of observation a check produces. One of `lab` (synthetic, reproducible, derived from a single crawl or a single API call to a declared source) or `field` (aggregated from real-world signals over a declared time window). All checks in v0.1 are `lab`. This field exists to accommodate `field`-type checks — for example, citation-rate measurement across generative AI platforms — in future versions without restructuring the spec. A conformant implementation treats an unknown measurement_type value as `lab` for scoring purposes and emits a warning.
+**Measurement type.** The category of observation a check produces. One of `lab` (synthetic, reproducible, derived from a single crawl or a single API call to a declared source), `field` (aggregated from real-world signals or external lookups; no customer account required), or `connected` (measurement requires customer OAuth or API key connection to a third-party service; cannot be performed in unauthenticated mode). Conformant implementations MUST return `not_checked` for `connected` checks when operating in unauthenticated mode. See also Appendix C.8.
 
 **Implementation.** A software tool that produces audit reports conformant to this standard.
 
@@ -369,7 +453,7 @@ An audit report that claims conformance MUST declare its level. The three levels
 
 **Minimal.** The audit report parses against the JSON Schema, contains `standard_version`, `audited_url`, `timestamp`, and at least one valid check entry with a valid verdict.
 
-**Standard.** All seventeen launch checks are present. Each check contains a valid verdict from its declared verdict set. The four `minimal`-level fields are present.
+**Standard.** All twenty launch checks are present. Each check contains a valid verdict from its declared verdict set. The four `minimal`-level fields are present.
 
 **Full.** The `standard` level, plus: every check contains the evidence fields declared as `evidence_required`; scoring is present and reproducible from the verdicts using the formulas defined in this document; methodology metadata (engine version, data sources, timestamps per external lookup) is present and complete.
 
@@ -449,6 +533,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** High.
 
+**Action category.** auto_deployable.
+
 **Informative references.** RFC 9110 §4.2.2; MDN Web Docs, "HTTPS"; Google Search Central, "Secure your site with HTTPS".
 
 ---
@@ -466,6 +552,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `viewport_value` — the full content attribute of the viewport tag, or `null` if absent.
 
 **Impact.** Medium.
+
+**Action category.** auto_deployable.
 
 **Informative references.** W3C, "CSS Device Adaptation"; Google Search Central, "Mobile-friendly test".
 
@@ -487,6 +575,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** High.
 
+**Action category.** auto_deployable.
+
 **Informative references.** WHATWG HTML §4.2.2; Google Search Central, "Influencing your title links in search".
 
 ---
@@ -506,6 +596,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `description_length` — integer character count.
 
 **Impact.** Medium.
+
+**Action category.** auto_deployable.
 
 **Informative references.** Google Search Central, "Meta descriptions".
 
@@ -527,6 +619,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Medium.
 
+**Action category.** auto_deployable.
+
 **Informative references.** Google Search Central, "Consolidate duplicate URLs"; RFC 6596.
 
 ---
@@ -546,6 +640,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `x_robots_tag` — the raw header value, or `null`.
 
 **Impact.** High.
+
+**Action category.** auto_deployable.
 
 **Informative references.** RFC 9309; Google Search Central, "Robots meta tag, data-nosnippet, and X-Robots-Tag specifications".
 
@@ -567,7 +663,37 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Low.
 
+**Action category.** auto_deployable.
+
 **Informative references.** sitemaps.org protocol 0.9; RFC 9309.
+
+---
+
+#### 5.1.8 seo.review_signals
+
+**Detection.** Connected lookup via Google Business Profile API. Requires customer GBP OAuth or API key connection.
+
+**Verdict rules.**
+- `pass` — average rating ≥ 4.0 AND review count ≥ 25 AND velocity positive AND response rate ≥ 80%.
+- `warning` — any single threshold missed.
+- `fail` — average rating < 3.5 OR review count < 10 OR response rate < 20%.
+- `not_checked` — GBP not connected, business not classified as local-intent, or implementation is operating in unauthenticated mode (e.g., free-tier audit).
+
+**Applicability.** `local_intent_only: true`. See §5.4 for the local-intent classification gate.
+
+**Evidence required at full level.**
+- `review_count` — total GBP review count.
+- `review_velocity_30d` — net new reviews in the trailing 30 days.
+- `average_rating` — numeric rating 0.0–5.0.
+- `rating_trend_90d` — one of `positive`, `negative`, `flat`, `unknown`.
+- `response_rate` — owner response rate as a percentage.
+- `response_time_hours` — median response time in hours.
+
+**Impact.** High.
+
+**Action category.** advisory.
+
+**Informative references.** Google Business Profile API documentation; Google Search Central, "Local SEO best practices".
 
 ---
 
@@ -587,7 +713,11 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `schema_found` — boolean.
 - `question_count` — integer; count of mainEntity questions in schema if present, else count of detected heuristic questions.
 
-**Impact.** High.
+**Impact.** Medium.
+
+**Action category.** auto_deployable.
+
+**Note.** Google deprecated FAQ rich results in standard Search for most content types in May 2026. This check remains valid because FAQ schema continues to inform AI answer engines (ChatGPT, Perplexity, Claude, Google AI Overviews) when extracting structured Q&A content from a page. The impact level reflects the reduced classical-SEO benefit while preserving the check's relevance to AI visibility.
 
 **Informative references.** schema.org FAQPage; Google Search Central, "FAQ structured data".
 
@@ -610,6 +740,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Medium.
 
+**Action category.** auto_deployable.
+
 **Informative references.** WHATWG HTML §4.3.6; WCAG 2.2 SC 1.3.1 and 2.4.6.
 
 ---
@@ -631,6 +763,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** High.
 
+**Action category.** draft_handoff.
+
 **Informative references.** Liu et al. (2023), "GEO: Generative Engine Optimization", arXiv:2311.09735; BrightEdge, "Featured Snippet Research Report" (2022).
 
 ---
@@ -649,6 +783,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `required_properties_present` — array of present properties from the required set.
 
 **Impact.** Medium.
+
+**Action category.** auto_deployable.
 
 **Informative references.** schema.org Article; Google Search Central, "Article structured data".
 
@@ -670,6 +806,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Low.
 
+**Action category.** auto_deployable.
+
 **Informative references.** schema.org Organization; schema.org LocalBusiness.
 
 ---
@@ -690,6 +828,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `llms_txt_valid` — boolean (structural validity).
 
 **Impact.** Medium.
+
+**Action category.** auto_deployable.
 
 **Informative references.** Answer.AI, "The /llms.txt file" (2024).
 
@@ -713,6 +853,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** High.
 
+**Action category.** auto_deployable.
+
 **Informative references.** schema.org `sameAs`; Wikidata, "Items about organizations".
 
 ---
@@ -733,6 +875,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 - `sources_timestamp` — per-source ISO 8601 timestamp of the lookup.
 
 **Impact.** Medium.
+
+**Action category.** advisory.
 
 **Informative references.** Wikidata Query Service; Crunchbase API; OpenCorporates API.
 
@@ -755,6 +899,8 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Low.
 
+**Action category.** draft_handoff.
+
 **Informative references.** Google's "About this result" documentation; E-E-A-T guidelines (Search Quality Evaluator Guidelines, Google 2024).
 
 ---
@@ -776,11 +922,68 @@ This section is normative. Each check defines a detection method, a verdict rule
 
 **Impact.** Medium.
 
+**Action category.** auto_deployable.
+
 **Informative references.** Moz, "NAP Consistency for Local SEO"; Google Business Profile guidelines.
 
 ---
 
-### 5.4 Threshold summary
+#### 5.3.6 geo.review_platform_presence
+
+**Detection.** External lookup. The implementation checks entity presence on a declared list of industry-relevant third-party review platforms.
+
+**Verdict rules.**
+- `pass` — the entity is found on two or more declared platforms.
+- `warning` — the entity is found on one declared platform.
+- `fail` — the entity is not found on any declared platform.
+- `not_checked` — the implementation does not support this check, or all platform queries failed.
+
+**Evidence required at full level.**
+- `platforms_checked` — array of platform names queried.
+- `platforms_present` — array of platforms where the entity was found.
+- `platforms_missing` — array of platforms where the entity was not found.
+
+**Impact.** Medium.
+
+**Action category.** advisory.
+
+**Informative references.** Yelp, TripAdvisor, Trustpilot, G2, Capterra API documentation.
+
+---
+
+#### 5.3.7 geo.inbound_citation_velocity
+
+**Detection.** External lookup against a backlink or brand-mention data source.
+
+**Verdict rules.**
+- `pass` — citation count is growing over the trailing period (velocity_direction is positive).
+- `warning` — citation count is flat over the trailing period.
+- `fail` — citation count is declining over the trailing period.
+- `not_checked` — the implementation does not support this check, or the data source was unreachable.
+
+**Evidence required at full level.**
+- `citation_count_current` — integer count for the current period.
+- `citation_count_prior_period` — integer count for the prior period.
+- `velocity_direction` — one of `positive`, `negative`, `flat`, `unknown`.
+- `top_citing_domains` — array of domains with highest citation count.
+
+**Impact.** Medium.
+
+**Action category.** advisory.
+
+**Informative references.** Ahrefs API; Moz Links API; Majestic API.
+
+---
+
+### 5.4 Local-intent classification gate
+
+Where a check carries `local_intent_only: true`, conformant implementations MUST classify the business as local-intent or non-local-intent before evaluation. Businesses classified as non-local-intent receive `not_checked` on the check. Classification methodology is implementation-defined; common signals include the presence of a verified Google Business Profile, NAP (name/address/phone) schema on the homepage, or explicit operator declaration during onboarding. Implementations SHOULD document their classification methodology.
+
+In v0.1.1, `seo.review_signals` is the only check carrying `local_intent_only: true`.
+
+---
+
+### 5.5 Threshold summary
 
 This subsection is non-normative. It consolidates every numeric threshold declared in §5.1 through §5.3 into a single table so that implementers and reviewers may audit threshold decisions in one pass. The authoritative definitions remain in the individual check specifications; in the event of any divergence between the prose of §5.1–§5.3 and this summary, the check specification governs.
 
@@ -789,6 +992,9 @@ This subsection is non-normative. It consolidates every numeric threshold declar
 | seo.https | Redirect limit | 10 (RECOMMENDED maximum) |
 | seo.title_tag | Title length | 10–70 characters → `pass`; outside → `warning` |
 | seo.meta_description | Description length | 50–160 characters → `pass`; outside → `warning` |
+| seo.review_signals | Average rating | ≥ 4.0 → `pass` threshold; < 3.5 → `fail` threshold |
+| seo.review_signals | Review count | ≥ 25 → `pass` threshold; < 10 → `fail` threshold |
+| seo.review_signals | Response rate | ≥ 80% → `pass` threshold; < 20% → `fail` threshold |
 | aeo.faq_schema | FAQPage question count | ≥ 2 `mainEntity` questions → `pass` |
 | aeo.heading_hierarchy | `<h1>` count | exactly 1 → `pass`; 0 or > 1 → `fail` |
 | aeo.direct_answer_opening | First-paragraph word count | 40–60 words → `pass` (with definition); outside → `warning` |
@@ -859,7 +1065,7 @@ All displayed scores MUST be rounded to the nearest integer using round-half-up.
 
 ### 6.7 Why the pillar cap is 95
 
-No implementation achieves 100 on this standard, by design. The pillar cap of 95 reflects the fact that the seventeen checks in v0.1 are necessary but not sufficient for any real site's AI visibility — a site that scores 95 across all three pillars has passed every measurable structural check, but there remain unmeasurable factors (content quality, editorial credibility, inbound reference velocity, platform-specific citation history) that this standard does not claim to capture.
+No implementation achieves 100 on this standard, by design. The pillar cap of 95 reflects the fact that the twenty checks in v0.1.1 are necessary but not sufficient for any real site's AI visibility — a site that scores 95 across all three pillars has passed every measurable structural check, but there remain unmeasurable factors (content quality, editorial credibility, inbound reference velocity, platform-specific citation history) that this standard does not claim to capture.
 
 The gap between 95 and 100 is the gap between this standard and the truth. It is not a flaw; it is an acknowledgement. Any tool that produces 100/100 scores is overclaiming.
 
@@ -867,7 +1073,7 @@ The gap between 95 and 100 is the gap between this standard and the truth. It is
 
 ## 7. Audit report format
 
-The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema exported from this specification at `standard.makeitseo.io/v0.1/audit-report.schema.json`. This section describes the shape informally.
+The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema at `https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json`. This section describes the shape informally.
 
 ### 7.1 Top-level structure
 
@@ -876,26 +1082,60 @@ The audit report is a single JSON document. Its canonical shape is defined by th
   "standard_version": "0.1",
   "level": "full",
   "audited_url": "https://example.com/page",
-  "timestamp": "2026-04-23T10:30:00Z",
+  "timestamp": "2026-05-20T10:30:00Z",
   "implementation": {
-    "name": "MakeitSEO Reference Engine",
+    "name": "FixMySEO Reference Engine",
     "version": "1.0.0"
   },
   "checks": {
-    "seo.https": { "verdict": "pass", "evidence": { /* ... */ } },
-    "seo.mobile_viewport": { "verdict": "pass", "evidence": { /* ... */ } }
+    "seo.https": {
+      "verdict": "pass",
+      "action_category": "auto_deployable",
+      "evidence": { "final_url": "https://example.com/page", "final_protocol": "https" }
+    },
+    "seo.mobile_viewport": {
+      "verdict": "pass",
+      "action_category": "auto_deployable",
+      "evidence": { "viewport_value": "width=device-width, initial-scale=1" }
+    },
+    "seo.review_signals": {
+      "verdict": "not_checked",
+      "action_category": "advisory",
+      "evidence": {
+        "truncation_reason": "GBP not connected — unauthenticated audit mode. Connect Google Business Profile to enable this check."
+      }
+    },
+    "geo.review_platform_presence": {
+      "verdict": "warning",
+      "action_category": "advisory",
+      "evidence": {
+        "platforms_checked": ["Yelp", "Trustpilot", "Google Maps"],
+        "platforms_present": ["Google Maps"],
+        "platforms_missing": ["Yelp", "Trustpilot"]
+      }
+    },
+    "geo.inbound_citation_velocity": {
+      "verdict": "pass",
+      "action_category": "advisory",
+      "evidence": {
+        "citation_count_current": 142,
+        "citation_count_prior_period": 118,
+        "velocity_direction": "positive",
+        "top_citing_domains": ["example-news.com", "industry-blog.org"]
+      }
+    }
     /* 15 more checks at standard or full level */
   },
   "scoring": {
     "pillar_scores": { "seo": 87, "aeo": 72, "geo": 54 },
     "overall_score": 71,
-    "overall_score_semantics": "Structural conformance across 17 checks in three pillars. Does not measure actual citation rate on generative AI platforms."
+    "overall_score_semantics": "Structural conformance across 20 checks in three pillars. Does not measure actual citation rate on generative AI platforms."
   },
   "methodology": {
     "engine_version": "1.0.0",
     "data_sources": [
-      { "name": "Wikidata", "queried_at": "2026-04-23T10:30:12Z" },
-      { "name": "Crunchbase", "queried_at": "2026-04-23T10:30:14Z" }
+      { "name": "Wikidata", "queried_at": "2026-05-20T10:30:12Z" },
+      { "name": "Crunchbase", "queried_at": "2026-05-20T10:30:14Z" }
     ]
   }
 }
@@ -913,7 +1153,7 @@ The `overall_score_semantics` requirement exists to prevent the score from being
 
 ### 7.3 Non-standard check extensions
 
-Implementations MAY include additional checks beyond the seventeen defined here. Such checks MUST be namespaced outside the three pillar prefixes (for example, `ext.vendor.custom_check`). Non-standard checks MUST NOT contribute to pillar or overall scores. A validator encountering a non-standard check will emit an `info`-severity finding, not an error.
+Implementations MAY include additional checks beyond the twenty defined here. Such checks MUST be namespaced outside the three pillar prefixes (for example, `ext.vendor.custom_check`). Non-standard checks MUST NOT contribute to pillar or overall scores. A validator encountering a non-standard check will emit an `info`-severity finding, not an error.
 
 ---
 
@@ -968,36 +1208,36 @@ Implementations MUST declare the `standard_version` against which they produce a
 
 ---
 
-## 10. Conformance testing
+## 10. Validation and conformance
 
-### 10.1 The validator
+### 10.1 Validator reference implementation
 
-Conformance is established mechanically by the validator published at `@makeitseo/standard` on npm. The validator takes an audit report and produces a structured finding report. Zero errors at the declared level equals conformance at that level.
+The reference validator is published as the npm package `@fixmyseo/standard`. To validate an audit report against this Standard:
 
 ```bash
-npx @makeitseo/standard lint --level standard my-audit.json
+npx @fixmyseo/standard@0.1 lint --level standard my-audit.json
 ```
 
-Exit code 0 indicates conformance. Exit code 1 indicates conformance failure. Exit code 2 indicates a tool error.
+The `--level` flag accepts `core`, `standard`, or `strict` (see §4 for level definitions). The validator returns exit code 0 on conformance, non-zero on violation, and writes a structured report to stdout. Exit code 2 indicates a tool error rather than a conformance failure.
 
-### 10.2 The public endpoint
-
-A hosted HTTP version of the validator is available at `validate.makeitseo.io` for non-developer users and for third-party tools that want to display a conformance badge. The endpoint is free, rate-limited, and does not require an account.
-
-### 10.3 Claiming conformance
+### 10.2 Claiming conformance
 
 An implementation claiming AI Visibility Audit Standard conformance MUST:
 
 1. Run the validator against a representative audit output at the claimed level.
-2. Achieve zero errors.
+2. Achieve zero errors at that level.
 3. State the claimed level and the standard version in any public representation of conformance.
 4. Re-verify conformance within thirty days of any spec version bump that affects the implementation.
 
-An implementation MAY display the embeddable conformance badge served from `validate.makeitseo.io` if it has passed validation within the preceding thirty days. The badge links back to the validator, where anyone may re-verify the claim.
+### 10.3 Conformance badges
 
-### 10.4 The implementations directory
+Implementations conformant at any level may display a badge. Badge SVGs are provided in the `badges/` directory of the spec repository at `https://github.com/cloud-wifi/fixmyseo-standard`.
 
-A public directory of conformant implementations is maintained at `standard.makeitseo.io/implementations`. Listing is alphabetical and includes the conformance level and last-verified date. Inclusion is free. The reference implementation is listed with a marker indicating its canonical status. Competitors to the reference implementation are included on the same terms as any other implementer; this is what distinguishes a directory from a product page.
+Implementers self-attest conformance and include the badge in their own documentation. A formal hosted badge service is not part of v0.1; an implementer's claim of conformance can be verified by running the reference validator against the implementer's published audit report output.
+
+### 10.4 Implementations directory
+
+A directory of conformant implementations is maintained in `IMPLEMENTATIONS.md` at the root of the spec repository. Implementers who wish to be listed should open a pull request adding their implementation to that file. Listing is alphabetical and includes the conformance level and last-verified date. Inclusion is free and open to all implementers, including commercial competitors of the reference implementation.
 
 ---
 
@@ -1052,6 +1292,22 @@ An implementation MAY declare additional directories and include them in evidenc
 
 ## Appendix B — Change log
 
+### v0.1.1 — 2026-05-20
+
+Documentation updates.
+
+**Added.** `action_category` field to all check front matter and prose specifications, establishing a three-value vocabulary (`auto_deployable`, `draft_handoff`, `advisory`). Three new checks: `seo.review_signals` (GBP review health, connected measurement), `geo.review_platform_presence` (third-party platform presence, field measurement), `geo.inbound_citation_velocity` (citation growth velocity, field measurement). `measurement_type: connected` vocabulary extension (Appendix C.8). `geo.sameas_authority` two-layer behaviour note (Appendix C.7). Local-intent classification gate (§5.4). `seo.review_signals` rows in threshold summary (§5.5). Conformance check count updated 17 → 20 throughout.
+
+**Changed.** `aeo.faq_schema` impact downgraded High → Medium; deprecation note added reflecting Google's May 2026 withdrawal of FAQ rich results from standard Search. §10 Conformance testing rewritten to remove `validate.fixmyseo.io` references and `standard.fixmyseo.io/implementations`. `$id` URI in `audit-report.schema.json` updated to GitHub raw URL. `canonical_url` in STANDARD.md front matter updated to GitHub permalink. §7 example JSON expanded to illustrate `action_category` and new checks including `not_checked` for unauthenticated `seo.review_signals`.
+
+**Removed.** All hosted-endpoint references (`*.fixmyseo.io`) from STANDARD.md, VALIDATOR.md, and README.md.
+
+**Breaking changes.** None. Check IDs, verdict vocabulary, scoring methodology, and conformance level definitions are unchanged.
+
+**Migration guide.** Existing conformant implementations remain conformant. Implementations that wish to support the three new checks may add them at any time; the checks are additive and scored only if present. Implementations operating in unauthenticated mode MUST return `not_checked` for `seo.review_signals` (and any other `connected` measurement checks added in future versions).
+
+---
+
 ### v0.1 — 2026-04-23
 
 Initial release.
@@ -1104,6 +1360,30 @@ The reference implementation is designated in §10.3 but its internal behaviour 
 
 ---
 
+### C.7 `geo.sameas_authority` — two-layer behaviour
+
+The `geo.sameas_authority` check has two underlying failure modes that share a single verdict in v0.1.1:
+
+1. **Schema layer.** The entity exists in an authoritative source (Wikidata, Crunchbase, etc.) but the `sameAs` array on the entity's own schema does not link to it. This is auto-deployable — the conformant implementation can add the `sameAs` reference to the entity's published schema.
+
+2. **Field layer.** The entity does not exist in any authoritative source. The `sameAs` array cannot reference what does not exist. The customer must first establish the entity in an authoritative source (typically Wikidata or Crunchbase) before any `sameAs` link is meaningful. This is advisory.
+
+Conformant implementations SHOULD distinguish these two failure modes in their finding output. A future minor release of the Standard MAY split `geo.sameas_authority` into two distinct checks; v0.1.1 retains the single check for backward compatibility.
+
+---
+
+### C.8 `measurement_type: connected` vocabulary extension
+
+v0.1.1 introduces a third `measurement_type` value: `connected`. The full vocabulary:
+
+- `lab` — synthetic crawl observation. No external API calls. No customer account required. Examples: schema presence checks, heading hierarchy, meta tags.
+- `field` — external lookup against a public or semi-public API. No customer account required. Examples: backlink data, directory presence lookups, third-party platform existence checks.
+- `connected` — measurement requires customer OAuth or API key connection to a third-party service. Cannot be performed in unauthenticated mode. Examples: Google Business Profile review data, Search Console performance data.
+
+Conformant implementations MUST return `not_checked` for `connected` checks when operating in unauthenticated mode (e.g., free-tier audits, demonstration mode, or any audit performed without the required customer credentials). Implementations SHOULD make the unauthenticated-mode status visible to the audit consumer.
+
+---
+
 *— End of document —*
 
-*AI Visibility Audit Standard v0.1 · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23*
+*AI Visibility Audit Standard v0.1.1 · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23 · Updated 2026-05-20*

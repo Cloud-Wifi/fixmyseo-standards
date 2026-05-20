@@ -200,7 +200,7 @@ def build_schema(fm: dict) -> dict:
 
     schema = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": f"https://standard.makeitseo.io/v{version}/audit-report.schema.json",
+        "$id": f"https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json",
         "title": "AI Visibility Audit Report",
         "description": (
             f"Canonical JSON Schema for audit reports conformant to the AI Visibility "
@@ -323,7 +323,7 @@ def build_schema(fm: dict) -> dict:
 
         # Conditional requirements by declared conformance level.
         "allOf": [
-            # If level = "standard" or "full", all 17 checks must be present.
+            # If level = "standard" or "full", all 20 checks must be present.
             {
                 "if": {
                     "properties": {"level": {"enum": ["standard", "full"]}},

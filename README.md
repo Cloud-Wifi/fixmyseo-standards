@@ -1,30 +1,32 @@
-# MakeitSEO Standards Programme
+# FixMySEO Standards Programme
 
 Open specifications for measuring and improving website visibility in traditional search engines, answer engines, and AI-generated responses.
 
 [![Licence: CC-BY 4.0](https://img.shields.io/badge/Licence-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-![Schema](https://img.shields.io/badge/Schema-MIT-blue)
+[![Validator: MIT](https://img.shields.io/badge/Validator-MIT-blue.svg)](./LICENSE-MIT.txt)
+[![npm: @fixmyseo/standard](https://img.shields.io/npm/v/@fixmyseo/standard.svg)](https://www.npmjs.com/package/@fixmyseo/standard)
+
 ---
 
 ## What this is
 
-The MakeitSEO Standards Programme is a set of vendor-neutral, openly licensed specifications that define:
+The FixMySEO Standards Programme is a set of vendor-neutral, openly licensed specifications that define:
 
 - **What to measure** when auditing a website for search engine, answer engine, and AI visibility.
 - **How to score** findings consistently across implementations, so that two conformant tools produce comparable results from the same input.
 - **How AI agents** should signal their capabilities, limitations, and operating context to downstream consumers.
 
-Specifications are normative documents. They can be cited, forked, translated, and implemented by anyone — including commercial competitors to MakeitSEO — without permission or licence fees.
+Specifications are normative documents. They can be cited, forked, translated, and implemented by anyone — including commercial competitors to FixMySEO — without permission or licence fees.
 
 ---
 
 ## Specifications
 
-### MakeitSEO Standard
+### FixMySEO Standard
 
 > Current version: **v0.1** (draft)
 
-The MakeitSEO Standard defines a structured methodology for auditing and scoring website visibility across three dimensions:
+The FixMySEO Standard defines a structured methodology for auditing and scoring website visibility across three dimensions:
 
 | Dimension | Definition |
 |-----------|------------|
@@ -34,7 +36,7 @@ The MakeitSEO Standard defines a structured methodology for auditing and scoring
 
 The three scores are independent. The overall score is their mean. No weighting is applied.
 
-→ [`makeitseo-standard/STANDARD.md`](./makeitseo-standard/STANDARD.md)
+→ [`fixmyseo-standard/STANDARD.md`](./fixmyseo-standard/STANDARD.md)
 
 ### Agent Runtime Compatibility (ARC)
 
@@ -53,9 +55,9 @@ Each specification ships as four artefacts, not just a document:
 | Pillar | What it is |
 |--------|------------|
 | **Specification document** | The normative `.md` file — the human-readable source of truth |
-| **Conformance validator** | CLI + Node.js library (`@makeitseo/standard`) for programmatic compliance checking |
+| **Conformance validator** | CLI + Node.js library (`@fixmyseo/standard`) for programmatic compliance checking |
 | **Schema and type exports** | JSON Schema, OpenAPI fragment, TypeScript `.d.ts`, and Pydantic model — for embedding in any language and toolchain |
-| **Reference implementation** | The MakeitSEO audit engine, which is the designated reference implementation of the MakeitSEO Standard |
+| **Reference implementation** | The FixMySEO audit engine, which is the designated reference implementation of the FixMySEO Standard |
 
 The **fabricated-verdict lint rule** is the single most important rule in the validator. It enforces the programme's zero-fabricated-verdicts principle: no conformant tool may report a passing result for a check it did not actually perform.
 
@@ -64,14 +66,14 @@ The **fabricated-verdict lint rule** is the single most important rule in the va
 ## Validator quick start
 
 ```bash
-npm install -g @makeitseo/standard
-makeitseo-validate ./my-audit-output.json
+npm install -g @fixmyseo/standard
+fixmyseo-validate ./my-audit-output.json
 ```
 
 Or programmatically:
 
 ```js
-import { validate } from '@makeitseo/standard';
+import { validate } from '@fixmyseo/standard';
 
 const result = validate(auditPayload);
 if (!result.valid) {
@@ -79,17 +81,7 @@ if (!result.valid) {
 }
 ```
 
-→ Full API reference in [`makeitseo-standard/VALIDATOR.md`](./makeitseo-standard/VALIDATOR.md)
-
----
-
-## Public validator
-
-A hosted version of the validator is available at:
-
-**[validate.makeitseo.io](https://validate.makeitseo.io)**
-
-Paste or upload an audit payload and receive a conformance report with line-level diagnostics.
+→ Full API reference in [`fixmyseo-standard/VALIDATOR.md`](./fixmyseo-standard/VALIDATOR.md)
 
 ---
 
@@ -97,9 +89,9 @@ Paste or upload an audit payload and receive a conformance report with line-leve
 
 Conformant implementations — including third-party tools — are listed in:
 
-→ [`makeitseo-standard/IMPLEMENTATIONS.md`](./makeitseo-standard/IMPLEMENTATIONS.md)
+→ [`IMPLEMENTATIONS.md`](./IMPLEMENTATIONS.md)
 
-To list your implementation, open an issue using the **Implementation listing request** template. There is no fee and no exclusivity requirement. The conformance bar is defined in `STANDARD.md §8`.
+To list your implementation, open a pull request adding your entry to `IMPLEMENTATIONS.md`. There is no fee and no exclusivity requirement. The conformance bar is defined in `STANDARD.md §10`.
 
 ---
 
@@ -111,9 +103,9 @@ To list your implementation, open an issue using the **Implementation listing re
 
 **LLM-native from v0.1.** GEO is a first-class dimension, not an afterthought. The spec accounts for the reality that a significant and growing share of search queries are now resolved by language models rather than traditional SERPs.
 
-**Non-coercive adoption.** A specification someone *can* adopt is more credible than a methodology someone *must* license. The Programme commits to maintaining specs as open assets that any product or methodology can implement, with no obligation to use MakeitSEO's platform.
+**Non-coercive adoption.** A specification someone *can* adopt is more credible than a methodology someone *must* license. The Programme commits to maintaining specs as open assets that any product or methodology can implement, with no obligation to use FixMySEO's platform.
 
-The Programme is maintained by [Cloud WiFi Limited](https://cloudwifi.io) (UK Co. No. 13521157), the company behind [MakeitSEO](https://makeitseo.io). Its governance is documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
+The Programme is maintained by [Cloud WiFi Limited](https://cloudwifi.io) (UK Co. No. 13521157), the company behind [FixMySEO](https://fixmyseo.io). Its governance is documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 
@@ -151,7 +143,7 @@ The contents of this repository are dual-licensed. See [LICENSE](./LICENSE) for 
 You may share and adapt the material in any medium or format, for any purpose, including commercially, provided you give appropriate credit, link to the licence, and indicate if changes were made.
 
 **Recommended attribution:**
-> Based on the MakeitSEO Standards Programme by Cloud WiFi Limited, licensed under CC-BY 4.0. https://github.com/Cloud-Wifi/makeitseo-standards
+> Based on the FixMySEO Standards Programme by Cloud WiFi Limited, licensed under CC-BY 4.0. https://github.com/Cloud-Wifi/fixmyseo-standards
 
 ---
 
@@ -159,12 +151,12 @@ You may share and adapt the material in any medium or format, for any purpose, i
 
 | Channel | Details |
 |---------|---------|
-| Issues and specification proposals | [GitHub Issues](https://github.com/Cloud-Wifi/makeitseo-standards/issues) |
-| Maintainer | Daniel Titton, Cloud WiFi Limited — `daniel@makeitseo.io` |
-| Programme home | https://github.com/Cloud-Wifi/makeitseo-standards |
-| Platform | https://makeitseo.io |
+| Issues and specification proposals | [GitHub Issues](https://github.com/Cloud-Wifi/fixmyseo-standards/issues) |
+| Maintainer | Daniel Titton, Cloud WiFi Limited — `daniel@fixmyseo.io` |
+| Programme home | https://github.com/Cloud-Wifi/fixmyseo-standards |
+| Platform | https://fixmyseo.io |
 | Defensive governance domain | https://aivisibilitystandard.com |
 
 ---
 
-*MakeitSEO Standards Programme · CC-BY 4.0 (docs) / MIT (code) · Cloud WiFi Limited (UK Co. No. 13521157)*
+*FixMySEO Standards Programme · CC-BY 4.0 (docs) / MIT (code) · Cloud WiFi Limited (UK Co. No. 13521157)*

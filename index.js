@@ -27,7 +27,7 @@ module.exports = {
   schema: require('./audit-report.schema.json'),
 
   /** Standard version this package implements */
-  standardVersion: '0.1',
+  standardVersion: '0.1.1',
 
   /** Package version */
   version: '0.1.1',

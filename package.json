@@ -12,7 +12,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "validate": "node -e \"require('.')\" && echo 'Schema loads OK'"
+    "validate": "node -e \"require('.')\" && echo 'Schema loads OK'",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "seo",
@@ -34,5 +35,9 @@
   "homepage": "https://github.com/Cloud-Wifi/fixmyseo-standards#readme",
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
   }
 }

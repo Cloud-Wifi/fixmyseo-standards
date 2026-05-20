@@ -367,6 +367,29 @@
             "verdict"
           ],
           "type": "object"
+        },
+        "^(seo|aeo|geo)\\.[a-z0-9_.]+$": {
+          "properties": {
+            "measurement_type": {
+              "description": "How evidence for this check is collected. lab = statically inspectable; field = runtime or third-party data; connected = requires authenticated API access (v0.1.1).",
+              "enum": [
+                "lab",
+                "field",
+                "connected"
+              ],
+              "type": "string"
+            },
+            "action_category": {
+              "description": "Remediation category for this check. auto_deployable = can be fixed and shipped automatically; draft_handoff = requires human review before publishing; advisory = informational, no direct fix action (v0.1.1).",
+              "enum": [
+                "auto_deployable",
+                "draft_handoff",
+                "advisory"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
       },
       "properties": {

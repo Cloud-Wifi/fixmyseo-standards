@@ -1,0 +1,38 @@
+{
+  "name": "@fixmyseo/standard",
+  "version": "0.1.1",
+  "description": "AI Visibility Audit Standard — JSON Schema and specification (v0.1.1)",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "audit-report.schema.json",
+    "STANDARD.md",
+    "VALIDATOR.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "validate": "node -e \"require('.')\" && echo 'Schema loads OK'"
+  },
+  "keywords": [
+    "seo",
+    "ai-visibility",
+    "audit",
+    "standard",
+    "json-schema",
+    "aeo",
+    "geo"
+  ],
+  "license": "CC-BY-4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cloud-Wifi/fixmyseo-standards.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Cloud-Wifi/fixmyseo-standards/issues"
+  },
+  "homepage": "https://github.com/Cloud-Wifi/fixmyseo-standards#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}

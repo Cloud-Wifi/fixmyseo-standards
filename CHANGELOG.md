@@ -7,6 +7,12 @@ Specifications use a `v{major}.{minor}` version scheme (see GOVERNANCE.md §3).
 
 ---
 
+## [v0.1.1] — 2026-05-20
+
+Documentation updates.
+
+---
+
 ## [v0.1] — 2026-05-12
 
 ### Initial publication of the FixMySEO Standards Programme

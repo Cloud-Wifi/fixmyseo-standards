@@ -85,23 +85,13 @@ if (!result.valid) {
 
 ---
 
-## Public validator
-
-A hosted version of the validator is available at:
-
-**[validate.fixmyseo.io](https://validate.fixmyseo.io)**
-
-Paste or upload an audit payload and receive a conformance report with line-level diagnostics.
-
----
-
 ## Implementations directory
 
 Conformant implementations — including third-party tools — are listed in:
 
-→ [`fixmyseo-standard/IMPLEMENTATIONS.md`](./fixmyseo-standard/IMPLEMENTATIONS.md)
+→ [`IMPLEMENTATIONS.md`](./IMPLEMENTATIONS.md)
 
-To list your implementation, open an issue using the **Implementation listing request** template. There is no fee and no exclusivity requirement. The conformance bar is defined in `STANDARD.md §8`.
+To list your implementation, open a pull request adding your entry to `IMPLEMENTATIONS.md`. There is no fee and no exclusivity requirement. The conformance bar is defined in `STANDARD.md §10`.
 
 ---
 

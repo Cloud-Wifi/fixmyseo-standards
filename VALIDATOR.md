@@ -4,7 +4,7 @@
 
 Cloud WiFi Limited · Published 23 April 2026 · Licensed under CC-BY 4.0
 
-This document specifies the behaviour of a conformant validator for the AI Visibility Audit Standard. It is a companion document to STANDARD.md and is published alongside it at `standard.fixmyseo.io/validator`. Source is maintained at `github.com/cloud-wifi/fixmyseo-standard`.
+This document specifies the behaviour of a conformant validator for the AI Visibility Audit Standard. It is a companion document to STANDARD.md. Source is maintained at `https://github.com/cloud-wifi/fixmyseo-standard`.
 
 ---
 
@@ -25,7 +25,6 @@ This document specifies:
 - The JSON output format emitted by the validator, including the finding schema and summary block.
 - Exit codes and their semantics.
 - Version pinning behaviour — how a validator handles audit reports declaring a different standard version.
-- The public HTTP endpoint at `validate.fixmyseo.io`, including rate limits, error responses, and the badge-issuance protocol.
 - What it means to claim conformance as a validator (third-party validators are permitted; the standard does not require use of the reference validator published by Cloud WiFi Limited).
 
 ### 1.3 Non-goals
@@ -219,7 +218,7 @@ Each rule specification below contains:
 
 **Severity.** `error`
 
-**Enforces.** STANDARD.md §7 (Audit report format) and the exported JSON Schema at `standard.fixmyseo.io/v0.1/audit-report.schema.json`.
+**Enforces.** STANDARD.md §7 (Audit report format) and the exported JSON Schema at `https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json`.
 
 **Trigger.** The audit report does not validate against the JSON Schema for the resolved conformance level. This includes: missing required fields, fields of the wrong type, and violations of conditional requirements (for example, a `full`-level audit missing its `scoring` block).
 
@@ -479,86 +478,17 @@ If the validator process is terminated by a signal (SIGINT, SIGTERM, etc.), the 
 
 ---
 
-## 7. The public HTTP endpoint
+## 7. Conformance badges
 
-### 7.1 Purpose and scope
+Implementors conformant at any level may display the self-attestation badge. Badge SVGs are provided in the `badges/` directory of the spec repository at https://github.com/cloud-wifi/fixmyseo-standard.
 
-Cloud WiFi Limited operates a hosted HTTP version of the reference validator at `validate.fixmyseo.io`. The endpoint is provided as a public good, funded by Cloud WiFi Limited, and is not required for standard conformance — any organisation may operate its own validator, including its own HTTP endpoint, and produce equally valid conformance determinations.
+Conformance is self-attested: run the reference validator against your audit output, achieve zero errors at the claimed level, and include the badge in your own documentation. A formal hosted badge service is not part of v0.1.1. Anyone may verify a conformance claim by running:
 
-The public endpoint exists primarily for two purposes: non-developer users who need to validate a single audit without installing a package, and third-party tools that wish to display the conformance badge issued by the endpoint.
-
-### 7.2 API surface
-
-The endpoint exposes two routes:
-
-**`POST /v0.1/lint`** — accepts a JSON audit report as request body, returns the same JSON output as the CLI `lint` command.
-
-**`GET /v0.1/badge/<audit_hash>`** — returns an SVG badge for a previously-validated audit. See §7.5.
-
-### 7.3 Rate limits
-
-The endpoint is free and does not require an account. It is rate-limited per source IP address. In v0.1, the rate limit is **1,000 `lint` requests per IP per 24-hour rolling window**. This threshold is deliberately generous — it accommodates routine CI usage, manual experimentation, and small-scale integrations without requiring signup. A requesting tool that exceeds this threshold receives HTTP 429 with a `Retry-After` header indicating when the window resets.
-
-The rate limit threshold MAY be revised in minor releases of this specification. Any change MUST be announced at least 30 days before it takes effect, published in the change log, and reflected in the endpoint's `GET /v0.1/limits` response (when implemented).
-
-Higher-volume users may operate their own validator using the npm package or any third-party conformant implementation. There is no commercial path to higher rate limits on the public endpoint in v0.1; the endpoint is not a commercial product.
-
-### 7.4 CORS and authentication
-
-The `POST /v0.1/lint` route MUST permit cross-origin requests. The `Access-Control-Allow-Origin` header is set to `*`. This is the correct choice for a standards validator: any origin should be able to validate against the standard, and there is no user data worth protecting in a POST body that contains only an audit report.
-
-Authentication is not used in v0.1. Rate limiting is by IP. A future version MAY introduce optional API keys for attribution purposes (tracking which tools submit how many audits) but MUST NOT require them for access to the rate-limited free tier.
-
-### 7.5 The conformance badge
-
-A conformant audit report submitted to `POST /v0.1/lint` receives, in addition to the standard finding set, a `badge` field in the response:
-
-```json
-{
-  "conformant": true,
-  "level": "full",
-  "badge": {
-    "url": "https://validate.fixmyseo.io/v0.1/badge/7a8b3c...",
-    "svg_url": "https://validate.fixmyseo.io/v0.1/badge/7a8b3c....svg",
-    "expires_at": "2026-05-23T10:30:00Z"
-  },
-  "findings": [...]
-}
+```bash
+npx @fixmyseo/standard@0.1 lint --level <level> <audit-file>.json
 ```
 
-The badge URL is stable for thirty days from issuance. Fetching the SVG returns an embeddable badge image with text: `"Validated against AI Visibility Audit Standard v0.1 (full)"` or `"Validated against AI Visibility Audit Standard v0.1 (standard)"`.
-
-After the 30-day window, the badge URL returns HTTP 410 Gone. Implementations MUST re-validate their audit output to reissue a badge. This is deliberate: it enforces ongoing conformance rather than one-time claims. A tool that was conformant on 1 March and has since diverged should not continue to display the badge.
-
-Non-conformant audits receive no badge. The `badge` field is absent from the response. There is no "partial" or "warning" badge variant in v0.1 — the badge communicates binary conformance at the declared level.
-
-### 7.6 Error responses
-
-Error responses from the public endpoint follow RFC 9457 (Problem Details for HTTP APIs):
-
-```json
-{
-  "type": "https://validate.fixmyseo.io/problems/rate-limited",
-  "title": "Rate limit exceeded",
-  "status": 429,
-  "detail": "This IP has exceeded 1000 lint requests in the preceding 24 hours.",
-  "retry_after": "2026-04-24T10:30:00Z"
-}
-```
-
-Problem types used by v0.1:
-
-| Type | HTTP status | Cause |
-| --- | --- | --- |
-| `rate-limited` | 429 | IP-level rate limit exceeded. |
-| `malformed-request` | 400 | Request body is not valid JSON, or missing. |
-| `unsupported-version` | 400 | Audit declares a standard version this endpoint does not support. |
-| `payload-too-large` | 413 | Request body exceeds 5 MB. |
-| `internal-error` | 500 | Unexpected validator failure. |
-
-### 7.7 Deprecation and stability
-
-The URL `validate.fixmyseo.io/v0.1/*` is stable for the lifetime of v0.1 of the standard. When v0.2 ships, a parallel path at `validate.fixmyseo.io/v0.2/*` will be added; the v0.1 path remains operational for at least one year after v0.2 release to give implementers time to migrate.
+against the implementation's published audit output.
 
 ---
 
@@ -618,7 +548,7 @@ Specific parallels:
 
 - **Rule IDs as stable identifiers.** `hatch lint` treats rule IDs as part of the public API. This specification follows the same discipline in §3 and Appendix A.
 - **Severity as machine-readable policy.** `hatch lint` uses severity to distinguish blocking failures from advisory concerns. This specification uses the same model, with `--strict` as the escalation knob.
-- **Public validator endpoint as market mechanism.** `hatch lint` is most effective when run in CI or as a public service, not just locally. The public endpoint at `validate.fixmyseo.io` (§7) implements the same pattern.
+- **Public validator endpoint as market mechanism.** `hatch lint` is most effective when run in CI or as a public service, not just locally. The reference validator at `@fixmyseo/standard` implements the same pattern via `npx`.
 
 These parallels are not citations in the RFC-2119 sense — design.md is a convention, not a normative reference — but they inform the design choices in this specification and are recorded here for transparency.
 

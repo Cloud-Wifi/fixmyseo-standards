@@ -1,5 +1,5 @@
 {
-  "$id": "https://standard.fixmyseo.io/v0.1/audit-report.schema.json",
+  "$id": "https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": true,
   "allOf": [
@@ -29,12 +29,15 @@
               "geo.about_page_depth",
               "geo.directory_presence",
               "geo.entity_consistency",
+              "geo.inbound_citation_velocity",
               "geo.llms_txt_present",
+              "geo.review_platform_presence",
               "geo.sameas_authority",
               "seo.canonical_url",
               "seo.https",
               "seo.meta_description",
               "seo.mobile_viewport",
+              "seo.review_signals",
               "seo.robots_indexability",
               "seo.sitemap_present",
               "seo.title_tag"
@@ -320,7 +323,7 @@
       }
     }
   ],
-  "description": "Canonical JSON Schema for audit reports conformant to the AI Visibility Audit Standard v0.1. Maintained by Cloud WiFi Limited. Generated from STANDARD.md — do not edit by hand.",
+  "description": "Canonical JSON Schema for audit reports conformant to the AI Visibility Audit Standard v0.1.1. Maintained by Cloud WiFi Limited. Generated from STANDARD.md — do not edit by hand.",
   "examples": [
     {
       "audited_url": "https://example.com",
@@ -1104,6 +1107,85 @@
           "required": [
             "verdict"
           ],
+          "type": "object"
+        },
+        "geo.inbound_citation_velocity": {
+          "additionalProperties": true,
+          "properties": {
+            "evidence": {
+              "additionalProperties": true,
+              "properties": {
+                "citation_count_current": { "minimum": 0, "type": "integer" },
+                "citation_count_prior_period": { "minimum": 0, "type": "integer" },
+                "velocity_direction": { "enum": ["positive", "negative", "flat", "unknown"], "type": "string" },
+                "top_citing_domains": { "items": { "type": "string" }, "type": "array" }
+              },
+              "type": "object"
+            },
+            "truncation_reason": {
+              "description": "Required when verdict is 'not_checked' due to truncation (spec §8.3).",
+              "type": "string"
+            },
+            "verdict": {
+              "description": "Verdict for check geo.inbound_citation_velocity. One of: pass, warning, fail, not_checked.",
+              "enum": ["pass", "warning", "fail", "not_checked"],
+              "type": "string"
+            }
+          },
+          "required": ["verdict"],
+          "type": "object"
+        },
+        "geo.review_platform_presence": {
+          "additionalProperties": true,
+          "properties": {
+            "evidence": {
+              "additionalProperties": true,
+              "properties": {
+                "platforms_checked": { "items": { "type": "string" }, "type": "array" },
+                "platforms_missing": { "items": { "type": "string" }, "type": "array" },
+                "platforms_present": { "items": { "type": "string" }, "type": "array" }
+              },
+              "type": "object"
+            },
+            "truncation_reason": {
+              "description": "Required when verdict is 'not_checked' due to truncation (spec §8.3).",
+              "type": "string"
+            },
+            "verdict": {
+              "description": "Verdict for check geo.review_platform_presence. One of: pass, warning, fail, not_checked.",
+              "enum": ["pass", "warning", "fail", "not_checked"],
+              "type": "string"
+            }
+          },
+          "required": ["verdict"],
+          "type": "object"
+        },
+        "seo.review_signals": {
+          "additionalProperties": true,
+          "properties": {
+            "evidence": {
+              "additionalProperties": true,
+              "properties": {
+                "average_rating": { "maximum": 5, "minimum": 0, "type": "number" },
+                "rating_trend_90d": { "enum": ["positive", "negative", "flat", "unknown"], "type": "string" },
+                "response_rate": { "maximum": 100, "minimum": 0, "type": "number" },
+                "response_time_hours": { "minimum": 0, "type": "number" },
+                "review_count": { "minimum": 0, "type": "integer" },
+                "review_velocity_30d": { "type": "integer" }
+              },
+              "type": "object"
+            },
+            "truncation_reason": {
+              "description": "Required when verdict is 'not_checked' due to truncation (spec §8.3).",
+              "type": "string"
+            },
+            "verdict": {
+              "description": "Verdict for check seo.review_signals. One of: pass, warning, fail, not_checked.",
+              "enum": ["pass", "warning", "fail", "not_checked"],
+              "type": "string"
+            }
+          },
+          "required": ["verdict"],
           "type": "object"
         }
       },

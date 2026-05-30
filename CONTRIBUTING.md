@@ -1,4 +1,4 @@
-# Contributing to the MakeitSEO Standards Programme
+# Contributing to the FixMySEO Standards Programme
 
 Thank you for considering a contribution. This document explains how the programme is governed at v0.1, the three contribution types we accept, the conformance bar for implementations directory entries, and the planned Stage 2 transition that will formally open governance.
 
@@ -8,7 +8,7 @@ This is a working document. It will be revised at Stage 2 (§6) to reflect the b
 
 ## 1. Governance posture at v0.1
 
-The MakeitSEO Standards Programme is **editor-led** during the v0.1 cycle of both the MakeitSEO Standard and Agent Runtime Compatibility (ARC).
+The FixMySEO Standards Programme is **editor-led** during the v0.1 cycle of both the FixMySEO Standard and Agent Runtime Compatibility (ARC).
 
 This means:
 
@@ -27,7 +27,7 @@ Contributions that will be prioritised:
 
 | Type | Examples |
 |------|---------|
-| **Implementation feedback** | "We implemented the MakeitSEO Standard and §4.4 was ambiguous in this edge case..." |
+| **Implementation feedback** | "We implemented the FixMySEO Standard and §4.4 was ambiguous in this edge case..." |
 | **Coverage gaps** | New AI engines, new answer surfaces, new runtime types not yet in scope |
 | **Spec clarifications** | Places where the normative text is unclear, contradictory, or underspecified |
 | **Validator issues** | False positives/negatives, missing lint rules, performance issues |
@@ -49,7 +49,7 @@ Contributions that are out of scope at v0.1:
 For any substantive change (anything that would alter normative text, validator behaviour, or schema shape), open a GitHub Issue before writing code or a pull request. Use the relevant template:
 
 - **Specification change proposal** — for changes to `STANDARD.md` or `ARC.md`
-- **Validator bug report** — for bugs in the `@makeitseo/standard` npm package
+- **Validator bug report** — for bugs in the `@fixmyseo/standard` npm package
 - **Validator feature request** — for new lint rules or validator capabilities
 - **Implementation listing request** — to list a conformant implementation (see §4)
 - **General question / discussion** — for anything else
@@ -59,8 +59,8 @@ Discussion happens in the issue thread. The editor will indicate whether a PR is
 ### Step 2 — Fork and branch
 
 ```bash
-git clone https://github.com/Cloud-Wifi/makeitseo-standards.git
-cd makeitseo-standards
+git clone https://github.com/Cloud-Wifi/fixmyseo-standards.git
+cd fixmyseo-standards
 git checkout -b fix/your-descriptive-branch-name
 ```
 
@@ -112,12 +112,12 @@ docs(arc): clarify tool-availability declaration for stateless agents
 
 ## 4. Implementations directory
 
-Any conformant implementation — including products that compete with MakeitSEO — may request a listing in the implementations directory of the relevant specification.
+Any conformant implementation — including products that compete with FixMySEO — may request a listing in the implementations directory of the relevant specification.
 
 **Requirements:**
 
-1. Your implementation must pass the `@makeitseo/standard` validator at the current major version.
-2. You must be able to provide a conformance report (output of `makeitseo-validate`) or equivalent evidence.
+1. Your implementation must pass the `@fixmyseo/standard` validator at the current major version.
+2. You must be able to provide a conformance report (output of `fixmyseo-validate`) or equivalent evidence.
 3. You must agree to update or remove your listing within 30 days if a new major version is released and your implementation no longer conforms.
 
 **Process:**
@@ -128,7 +128,7 @@ Open an issue using the **Implementation listing request** template. Include:
 - Specification(s) and version(s) you conform to
 - A conformance report or link to one
 
-There is no fee, no exclusivity requirement, and no obligation to use MakeitSEO's platform. The implementations directory is the official record of conformant implementations. Listing is a factual statement, not an endorsement.
+There is no fee, no exclusivity requirement, and no obligation to use FixMySEO's platform. The implementations directory is the official record of conformant implementations. Listing is a factual statement, not an endorsement.
 
 ---
 
@@ -146,13 +146,13 @@ No contributor licence agreement (CLA) signature is required. Your pull request 
 
 ## 6. Stage 2 — planned governance transition
 
-Approximately 6–8 weeks after the v1.0 release of the MakeitSEO Standard, this programme is expected to transition to Stage 2 governance. Stage 2 will introduce:
+Approximately 6–8 weeks after the v1.0 release of the FixMySEO Standard, this programme is expected to transition to Stage 2 governance. Stage 2 will introduce:
 
 - A **technical advisory board** (TAB) — a small group of external experts with formal roles in the specification process. TAB members will be compensated; terms are deferred and will be published when the board is constituted.
 - **Formal RFC process** — substantive changes will require an RFC document, comment period, and TAB vote rather than editor discretion alone.
 - **Revised CONTRIBUTING.md** — this document will be updated to reflect the Stage 2 process at the time of transition.
 
-The Stage 2 transition will be announced via the repository, `makeitseo.io`, and the newsletter. No existing contributions or conformance claims will be invalidated by the transition.
+The Stage 2 transition will be announced via the repository, `fixmyseo.io`, and the newsletter. No existing contributions or conformance claims will be invalidated by the transition.
 
 ---
 
@@ -162,4 +162,4 @@ If something in this document is unclear, open a **General question / discussion
 
 ---
 
-*MakeitSEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*
+*FixMySEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*

@@ -1,6 +1,6 @@
 # Licensing notice
 
-The MakeitSEO Standards Programme uses a dual-licence model. The licence that applies to any given file in this repository is determined by what kind of file it is, as set out below.
+The FixMySEO Standards Programme uses a dual-licence model. The licence that applies to any given file in this repository is determined by what kind of file it is, as set out below.
 
 ---
 
@@ -8,7 +8,7 @@ The MakeitSEO Standards Programme uses a dual-licence model. The licence that ap
 
 The following are licensed under the **Creative Commons Attribution 4.0 International Public Licence** (CC-BY 4.0):
 
-- All `.md` files within `makeitseo-standard/` and `agent-runtime-compatibility/` (and their subdirectories)
+- All `.md` files within `fixmyseo-standard/` and `agent-runtime-compatibility/` (and their subdirectories)
 - All schema, type, and protocol exports: `.json` schema files, `.yaml` OpenAPI files, `.d.ts` TypeScript definitions, Pydantic model exports, Postman collection exports
 - All repository-level governance documents: `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `CHANGELOG.md`, `SECURITY.md`, and this `LICENSE` notice
 
@@ -16,7 +16,7 @@ You are free to:
 
 - **Share** — copy and redistribute the material in any medium or format
 - **Adapt** — remix, transform, and build upon the material
-- **Use commercially** — including building products that compete directly with MakeitSEO
+- **Use commercially** — including building products that compete directly with FixMySEO
 
 Under the following terms:
 
@@ -29,7 +29,7 @@ The full legal text of CC-BY 4.0 is reproduced in [`LICENSE-CC-BY-4.0.txt`](./LI
 
 The recommended attribution string is:
 
-> Based on the MakeitSEO Standards Programme by Cloud WiFi Limited, licensed under CC-BY 4.0. https://github.com/Cloud-Wifi/makeitseo-standards
+> Based on the FixMySEO Standards Programme by Cloud WiFi Limited, licensed under CC-BY 4.0. https://github.com/Cloud-Wifi/fixmyseo-standards
 
 Citation in academic, technical, or commercial documentation may follow the format appropriate to that context, provided the source, editor, licence, and canonical URL are identifiable.
 
@@ -42,7 +42,7 @@ The following are licensed under the **MIT Licence**:
 - Reference validator implementations
 - Test fixture files inside any `validator-tests/` directory
 - Build scripts, deterministic generators, and any other executable code committed to this repository
-- The `@makeitseo/standard` npm package (published separately, mirrored from this repository)
+- The `@fixmyseo/standard` npm package (published separately, mirrored from this repository)
 
 You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject only to the standard MIT notice and disclaimer. The full text is reproduced in [`LICENSE-MIT.txt`](./LICENSE-MIT.txt).
 
@@ -78,13 +78,13 @@ CC-BY 4.0 is the appropriate licence for normative documents: it preserves autho
 
 MIT is the appropriate licence for code: it permits embedding in proprietary products with minimal compliance overhead, which is the standard expectation for validator libraries and reference tooling.
 
-The two licences are fully compatible. A downstream product implementing the MakeitSEO Standard typically incorporates CC-BY 4.0 specification material (cited with attribution) and MIT-licensed validator code (with notice). No file in this repository uses a copyleft licence; nothing here will require derivative works to adopt any particular licence of their own.
+The two licences are fully compatible. A downstream product implementing the FixMySEO Standard typically incorporates CC-BY 4.0 specification material (cited with attribution) and MIT-licensed validator code (with notice). No file in this repository uses a copyleft licence; nothing here will require derivative works to adopt any particular licence of their own.
 
 ---
 
 ## Trademarks
 
-The names "MakeitSEO", "MakeitSEO Standard", "Agent Runtime Compatibility", and "ARC" (in the context of agent runtime compatibility) are unregistered trademarks of Cloud WiFi Limited. The CC-BY 4.0 licence does not grant trademark rights.
+The names "FixMySEO", "FixMySEO Standard", "Agent Runtime Compatibility", and "ARC" (in the context of agent runtime compatibility) are unregistered trademarks of Cloud WiFi Limited. The CC-BY 4.0 licence does not grant trademark rights.
 
 You may refer to the specifications by name when describing your implementation, comparing products, or citing the work. You may not use the names in a way that suggests endorsement by Cloud WiFi Limited, or implies that your product is the official specification, the canonical reference implementation, or otherwise authoritative.
 

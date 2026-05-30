@@ -1,8 +1,8 @@
-# Governance — MakeitSEO Standards Programme
+# Governance — FixMySEO Standards Programme
 
 ## Current governance model: Editor-led (v0.1)
 
-The MakeitSEO Standards Programme uses an **editor-led** model during the v0.1 cycle. This document defines how decisions are made, how the programme will transition to Stage 2 open governance, and the roles and processes that apply at each stage.
+The FixMySEO Standards Programme uses an **editor-led** model during the v0.1 cycle. This document defines how decisions are made, how the programme will transition to Stage 2 open governance, and the roles and processes that apply at each stage.
 
 ---
 
@@ -74,7 +74,7 @@ Stage 2 governance will be documented in a revised version of this file prior to
 
 ## 5. Conflicts of interest
 
-The editor (Cloud WiFi Limited / MakeitSEO) is also the publisher of the designated reference implementation. This creates a structural conflict that is acknowledged and managed through:
+The editor (Cloud WiFi Limited / FixMySEO) is also the publisher of the designated reference implementation. This creates a structural conflict that is acknowledged and managed through:
 
 1. The `fabricated-verdict` lint rule: no conformant tool may report a passing result for a check it did not perform — this prevents the reference implementation from gaining scoring advantages by silently skipping checks
 2. The open validator: all conformance checks are implemented in the public validator; no private pass/fail criteria exist
@@ -86,4 +86,4 @@ The editor (Cloud WiFi Limited / MakeitSEO) is also the publisher of the designa
 
 For governance questions: open a GitHub Issue with the label `governance`.
 
-For legal or licensing questions: contact legal@makeitseo.com
+For legal or licensing questions: contact legal@fixmyseo.io

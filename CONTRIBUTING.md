@@ -8,7 +8,7 @@ This is a working document. It will be revised at Stage 2 (§6) to reflect the b
 
 ## 1. Governance posture at v0.1
 
-The MakeitSEO Standards Programme is **editor-led** during the v0.1 cycle of both the MakeitSEO Standard and Agent Runtime Compatibility (ARC).
+The FixMySEO Standards Programme is **editor-led** during the v0.1 cycle of both the FixMySEO Standard and Agent Runtime Compatibility (ARC).
 
 This means:
 
@@ -116,8 +116,8 @@ Any conformant implementation — including products that compete with MakeitSEO
 
 **Requirements:**
 
-1. Your implementation must pass the `@makeitseo/standard` validator at the current major version.
-2. You must be able to provide a conformance report (output of `makeitseo-validate`) or equivalent evidence.
+1. Your implementation must pass the `@fixmyseo/standard` validator at the current major version.
+2. You must be able to provide a conformance report (output of `fixmyseo-validate`) or equivalent evidence.
 3. You must agree to update or remove your listing within 30 days if a new major version is released and your implementation no longer conforms.
 
 **Process:**
@@ -128,7 +128,7 @@ Open an issue using the **Implementation listing request** template. Include:
 - Specification(s) and version(s) you conform to
 - A conformance report or link to one
 
-There is no fee, no exclusivity requirement, and no obligation to use MakeitSEO's platform. The implementations directory is the official record of conformant implementations. Listing is a factual statement, not an endorsement.
+There is no fee, no exclusivity requirement, and no obligation to use FixMySEO's platform. The implementations directory is the official record of conformant implementations. Listing is a factual statement, not an endorsement.
 
 ---
 
@@ -162,4 +162,4 @@ If something in this document is unclear, open a **General question / discussion
 
 ---
 
-*MakeitSEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*
+*FixMySEO Standards Programme · CC-BY 4.0 · Cloud WiFi Limited (UK Co. No. 13521157)*

@@ -1,4 +1,4 @@
-# Contributing to the MakeitSEO Standards Programme
+# Contributing to the FixMySEO Standards Programme
 
 Thank you for considering a contribution. This document explains how the programme is governed at v0.1, the three contribution types we accept, the conformance bar for implementations directory entries, and the planned Stage 2 transition that will formally open governance.
 

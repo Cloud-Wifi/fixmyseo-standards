@@ -36,7 +36,7 @@ The FixMySEO Standard defines a structured methodology for auditing and scoring 
 
 The three scores are independent. The overall score is their mean. No weighting is applied.
 
-→ [`fixmyseo-standard/STANDARD.md`](./fixmyseo-standard/STANDARD.md)
+→ [STANDARD.md](./STANDARD.md)
 
 ### Agent Runtime Compatibility (ARC)
 
@@ -81,7 +81,7 @@ if (!result.valid) {
 }
 ```
 
-→ Full API reference in [`fixmyseo-standard/VALIDATOR.md`](./fixmyseo-standard/VALIDATOR.md)
+→ Full API reference in [VALIDATOR.md](./VALIDATOR.md)
 
 ---
 

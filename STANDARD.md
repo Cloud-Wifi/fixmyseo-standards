@@ -7,8 +7,8 @@ description: >
 license: CC-BY-4.0
 published: 2026-04-23
 editor: Cloud WiFi Limited
-repository: https://github.com/cloud-wifi/fixmyseo-standard
-canonical_url: https://github.com/cloud-wifi/fixmyseo-standard/blob/main/STANDARD.md
+repository: https://github.com/Cloud-Wifi/fixmyseo-standards
+canonical_url: https://github.com/Cloud-Wifi/fixmyseo-standards/blob/main/STANDARD.md
 
 pillars:
   seo:
@@ -1073,7 +1073,7 @@ The gap between 95 and 100 is the gap between this standard and the truth. It is
 
 ## 7. Audit report format
 
-The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema at `https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json`. This section describes the shape informally.
+The audit report is a single JSON document. Its canonical shape is defined by the JSON Schema at `https://raw.githubusercontent.com/Cloud-Wifi/fixmyseo-standards/main/audit-report.schema.json`. This section describes the shape informally.
 
 ### 7.1 Top-level structure
 
@@ -1231,7 +1231,7 @@ An implementation claiming AI Visibility Audit Standard conformance MUST:
 
 ### 10.3 Conformance badges
 
-Implementations conformant at any level may display a badge. Badge SVGs are provided in the `badges/` directory of the spec repository at `https://github.com/cloud-wifi/fixmyseo-standard`.
+Implementations conformant at any level may display a badge. Badge SVGs are provided in the `badges/` directory of the spec repository at `https://github.com/Cloud-Wifi/fixmyseo-standards`.
 
 Implementers self-attest conformance and include the badge in their own documentation. A formal hosted badge service is not part of v0.1; an implementer's claim of conformance can be verified by running the reference validator against the implementer's published audit report output.
 

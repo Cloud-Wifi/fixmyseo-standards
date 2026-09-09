@@ -4,7 +4,7 @@
 
 Cloud WiFi Limited · Published 23 April 2026 · Licensed under CC-BY 4.0
 
-This document specifies the behaviour of a conformant validator for the AI Visibility Audit Standard. It is a companion document to STANDARD.md. Source is maintained at `https://github.com/cloud-wifi/fixmyseo-standard`.
+This document specifies the behaviour of a conformant validator for the AI Visibility Audit Standard. It is a companion document to STANDARD.md. Source is maintained at `https://github.com/Cloud-Wifi/fixmyseo-standards`.
 
 ---
 
@@ -218,7 +218,7 @@ Each rule specification below contains:
 
 **Severity.** `error`
 
-**Enforces.** STANDARD.md §7 (Audit report format) and the exported JSON Schema at `https://raw.githubusercontent.com/cloud-wifi/fixmyseo-standard/main/audit-report.schema.json`.
+**Enforces.** STANDARD.md §7 (Audit report format) and the exported JSON Schema at `https://raw.githubusercontent.com/Cloud-Wifi/fixmyseo-standards/main/audit-report.schema.json`.
 
 **Trigger.** The audit report does not validate against the JSON Schema for the resolved conformance level. This includes: missing required fields, fields of the wrong type, and violations of conditional requirements (for example, a `full`-level audit missing its `scoring` block).
 
@@ -480,7 +480,7 @@ If the validator process is terminated by a signal (SIGINT, SIGTERM, etc.), the 
 
 ## 7. Conformance badges
 
-Implementors conformant at any level may display the self-attestation badge. Badge SVGs are provided in the `badges/` directory of the spec repository at https://github.com/cloud-wifi/fixmyseo-standard.
+Implementors conformant at any level may display the self-attestation badge. Badge SVGs are provided in the `badges/` directory of the spec repository at https://github.com/Cloud-Wifi/fixmyseo-standards.
 
 Conformance is self-attested: run the reference validator against your audit output, achieve zero errors at the claimed level, and include the badge in your own documentation. A formal hosted badge service is not part of v0.1.1. Anyone may verify a conformance claim by running:
 
@@ -511,7 +511,7 @@ The standard permits and encourages multiple conformant validator implementation
 
 ### 8.3 The reference audit test suite
 
-A companion test suite will be published at `github.com/cloud-wifi/fixmyseo-standard/tree/main/validator-tests`. The suite contains audit report fixtures paired with expected validator output. Any validator implementation claiming conformance with this specification MUST produce the expected output for every fixture in the suite.
+A companion test suite will be published at `github.com/Cloud-Wifi/fixmyseo-standards/tree/main/validator-tests`. The suite contains audit report fixtures paired with expected validator output. Any validator implementation claiming conformance with this specification MUST produce the expected output for every fixture in the suite.
 
 The test suite is versioned alongside the standard. A validator claiming conformance with v0.1 passes the v0.1 fixture set; a validator claiming conformance with v0.2 passes the v0.2 fixture set (which includes v0.1's fixtures, plus new ones for v0.2 additions).
 

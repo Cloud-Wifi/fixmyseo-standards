@@ -7,6 +7,28 @@ Specifications use a `v{major}.{minor}` version scheme (see GOVERNANCE.md §3).
 
 ---
 
+## [v0.1.2] — 2026-09-09
+
+Spec erratum. No weight values, measurement procedures, or verdict definitions changed.
+
+### Fixed
+
+- **S1 — weight-sum annotation (seo-scoring/v0.1):** Non-local sub-score weights (0.30 + 0.25 + 0.22 + 0.10 + 0.08 + 0.03) sum to 0.98, not 1.00. The Total row in the weight table now reads "98% (nominal) — see Aggregation note for renormalisation".
+- **S7 — missing renormalisation rule (seo-scoring/v0.1):** Added "Aggregation note — renormalisation when sub-scores are absent" section specifying that null sub-scores are excluded from aggregation and the pillar score is computed as `sum(weight_i × score_i for non-null) / sum(weight_i for non-null)`. Assigning a non-null default to an unmeasured sub-score is a fabricated verdict under STANDARD.md §3.1.
+- **S6 — legacy MakeitSEO branding (seo-scoring/v0.1):** Fixed "MakeitSEO Standards Programme" references in Contributing section, footer, and references. Corrected repo URL from `makeitseo-standards` to `fixmyseo-standards`.
+- **S3 — broken README links:** Fixed two links that pointed to a non-existent `fixmyseo-standard/` subdirectory. Corrected to `STANDARD.md` and `VALIDATOR.md` at the repository root.
+- **S4 — wrong repository org/slug in STANDARD.md and VALIDATOR.md:** All URLs used the stale `cloud-wifi/fixmyseo-standard` path. Corrected to `Cloud-Wifi/fixmyseo-standards` throughout both files (4 occurrences each).
+
+### Noted (pending decision)
+
+- **S2 — freshness floor conflict (content-freshness/v0.1):** This document specifies a floor of 0.30; CHANGELOG v0.1 and ADR #9 state 0.40. A conflict note has been added to the "Freshness multiplier" definition. The value will be corrected once OD3 is resolved; no implementation change is made at this patch.
+
+### Already resolved (no change required)
+
+- **S5:** Package references already use `@fixmyseo/standard`.
+
+---
+
 ## [v0.1.1] — 2026-05-20
 
 Documentation updates.

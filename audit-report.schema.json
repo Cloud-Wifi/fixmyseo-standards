@@ -5,6 +5,33 @@
   "allOf": [
     {
       "if": {
+        "properties": { "level": { "enum": ["standard", "full"] } },
+        "required": ["level"]
+      },
+      "then": {
+        "required": ["profile"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "level": { "const": "full" } },
+        "required": ["level"]
+      },
+      "then": {
+        "required": ["confidence", "methodology_ref"],
+        "properties": {
+          "checks": {
+            "patternProperties": {
+              "^(seo|aeo|geo)\\.[a-z0-9_.]+$": {
+                "required": ["measured_at"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
         "properties": {
           "level": {
             "enum": [
@@ -323,7 +350,7 @@
       }
     }
   ],
-  "description": "Canonical JSON Schema for audit reports conformant to the AI Visibility Audit Standard v0.1.1. Maintained by Cloud WiFi Limited. Generated from STANDARD.md — do not edit by hand.",
+  "description": "Canonical JSON Schema for audit reports conformant to the AI Visibility Audit Standard v0.2-draft. Maintained by Cloud WiFi Limited. Generated from STANDARD.md — do not edit by hand.",
   "examples": [
     {
       "audited_url": "https://example.com",
@@ -332,7 +359,7 @@
           "verdict": "pass"
         }
       },
-      "standard_version": "0.1",
+      "standard_version": "0.2-draft",
       "timestamp": "2026-04-23T10:30:00Z"
     }
   ],
@@ -386,6 +413,11 @@
                 "draft_handoff",
                 "advisory"
               ],
+              "type": "string"
+            },
+            "measured_at": {
+              "description": "ISO 8601 timestamp of when this check's primary evidence was collected. Required at the 'full' level (spec §8.5). Enables stale-verdict detection.",
+              "format": "date-time",
               "type": "string"
             }
           },
@@ -1277,10 +1309,15 @@
       "type": "object"
     },
     "scoring": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
+        "sub_scores": {
+          "description": "Sub-score family for Extended profile audits. Required when profile is 'extended'. Each entry is implementation-defined; must include 'score' (0–100 integer) and 'measurement_type' per sub-score.",
+          "type": "object"
+        },
         "overall_score": {
-          "maximum": 95,
+          "description": "Overall score. Maximum is 95 for Core profile and 100 for Extended profile (spec §2.4, §6.7).",
+          "maximum": 100,
           "minimum": 0,
           "type": [
             "integer",
@@ -1296,8 +1333,8 @@
           "additionalProperties": false,
           "properties": {
             "aeo": {
-              "description": "Integer pillar score capped at 95, or null if pillar is excluded.",
-              "maximum": 95,
+              "description": "Integer pillar score capped at 95 (Core) or 100 (Extended), or null if pillar is excluded (spec §2.4).",
+              "maximum": 100,
               "minimum": 0,
               "type": [
                 "integer",
@@ -1305,8 +1342,8 @@
               ]
             },
             "geo": {
-              "description": "Integer pillar score capped at 95, or null if pillar is excluded.",
-              "maximum": 95,
+              "description": "Integer pillar score capped at 95 (Core) or 100 (Extended), or null if pillar is excluded (spec §2.4).",
+              "maximum": 100,
               "minimum": 0,
               "type": [
                 "integer",
@@ -1314,8 +1351,8 @@
               ]
             },
             "seo": {
-              "description": "Integer pillar score capped at 95, or null if pillar is excluded.",
-              "maximum": 95,
+              "description": "Integer pillar score capped at 95 (Core) or 100 (Extended), or null if pillar is excluded (spec §2.4).",
+              "maximum": 100,
               "minimum": 0,
               "type": [
                 "integer",
@@ -1338,8 +1375,23 @@
       "type": "object"
     },
     "standard_version": {
-      "const": "0.1",
       "description": "The standard version this audit conforms to.",
+      "enum": ["0.1", "0.2-draft"],
+      "type": "string"
+    },
+    "profile": {
+      "description": "Conformance profile. 'core' uses the 20 lab checks with pillar cap 95. 'extended' adds sub-score families, field data, and weight renormalization with cap 100. Required at 'standard' and 'full' levels (spec §2.4).",
+      "enum": ["core", "extended"],
+      "type": "string"
+    },
+    "confidence": {
+      "description": "Evidence completeness indicator. 'high' = all in-scope checks used primary detection method. 'low' = one or more checks used a proxy/fallback, or audit is partial. Required at 'full' level (spec §7.4).",
+      "enum": ["high", "low"],
+      "type": "string"
+    },
+    "methodology_ref": {
+      "description": "Stable scoring-engine reference in format '<engine-id>/v<major>.<minor>'. Required at 'full' level. Must be incremented when the scoring methodology changes materially (spec §7.4).",
+      "pattern": "^[a-z0-9_-]+/v[0-9]+\\.[0-9]+$",
       "type": "string"
     },
     "timestamp": {

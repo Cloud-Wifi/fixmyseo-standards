@@ -1,4 +1,4 @@
-# AI Visibility Audit Standard — Validator Specification v0.1
+# AI Visibility Audit Standard — Validator Specification v0.2-draft
 
 **Conformance validator for the AI Visibility Audit Standard**
 
@@ -300,7 +300,7 @@ Each rule specification below contains:
 
 **Trigger.** The audit declares or is validated at the `standard` or `full` level but does not contain all 17 core checks. When this rule fires at the `standard` level or higher, `schema-conformance` will also have fired; this rule provides a human-readable summary.
 
-**Finding message template.** `Audit declares level '<level>' but contains <count> of 17 required core checks. Missing: <comma_separated_list>.`
+**Finding message template.** `Audit declares level '<level>' but contains <count> of 20 required core checks. Missing: <comma_separated_list>.`
 
 ### 3.8 unknown-check
 
@@ -340,7 +340,51 @@ Each rule specification below contains:
 
 **Note.** This is the single most important rule in the validator. The standard exists in part to prevent vendors from claiming AI-platform citation rates without actually measuring them. Once field checks ship in v0.2, this rule is the mechanism that blocks such claims at the validator layer. A vendor cannot pass `fabricated-verdict` while inferring Perplexity citation from "the site has FAQ schema" — the rule requires an actual Perplexity query timestamp in evidence.
 
-### 3.11 Rule summary table
+The `fabricated-verdict` rule extends to Extended-profile audits under STANDARD.md §2.4: an audit that claims the Extended profile but lacks the required `scoring.sub_scores` block triggers this rule.
+
+### 3.11 stale-verdict
+
+**ID.** `stale-verdict`
+
+**Severity.** `warning`
+
+**Enforces.** STANDARD.md §8.6 (Verdict validity windows).
+
+**Trigger.** At the time the validator runs, at least one check's `measured_at` timestamp is older than the validity window for its measurement type: 90 days for `lab`, 60 days for `field` or `connected`. The validator uses the local system clock as the consumption timestamp. This rule fires only when `measured_at` is present on a check; it does not fire when `measured_at` is absent (that is a `schema-conformance` error at the `full` level).
+
+**Finding message template.** `Check '<check_id>' (measurement_type: <type>) has a stale verdict: measured_at <measured_at> is <age_days> days old. Validity window: <window_days> days.`
+
+**Note.** This rule is `warning`-severity because the stale verdict may be intentional — some consumers store and compare historical audit reports. Downstream tools that present scores to end users MUST treat `stale-verdict` warnings as disclosure-required: the score presented MUST be clearly labelled as based on data older than the validity window.
+
+### 3.12 methodology-ref-present
+
+**ID.** `methodology-ref-present`
+
+**Severity.** `error`
+
+**Enforces.** STANDARD.md §7.4 (`methodology_ref` as a required field at the `full` level).
+
+**Trigger.** The audit report is validated at the `full` conformance level and the top-level `methodology_ref` field is absent or is an empty string.
+
+**Finding message template.** `Field 'methodology_ref' is required at the 'full' conformance level. Expected format: '<engine-id>/v<major>.<minor>' (e.g. 'seo-scoring/v0.1').`
+
+**Note.** `methodology_ref` is the anchor for score reproducibility. Without it, a consumer receiving two identical-looking audit reports cannot determine whether they were produced by the same scoring model. Treating its absence as an `error` (rather than `warning`) reflects this load-bearing role.
+
+### 3.13 profile-declared
+
+**ID.** `profile-declared`
+
+**Severity.** `error`
+
+**Enforces.** STANDARD.md §2.4 (Conformance profiles — `profile` field required at `standard` and `full` levels).
+
+**Trigger.** The audit report is validated at the `standard` or `full` conformance level and the top-level `profile` field is absent, or is present with a value that is neither `"core"` nor `"extended"`.
+
+**Finding message template.** `Field 'profile' is required at the '<level>' conformance level. Value MUST be 'core' or 'extended' (spec §2.4).`
+
+**Note.** The `profile` field is the mechanism that prevents Core and Extended scores from being silently conflated. An audit with no profile declaration cannot be correctly interpreted by a downstream consumer, because the maximum achievable score differs between the two profiles (95 vs 100). Treating its absence as an `error` reflects this ambiguity.
+
+### 3.14 Rule summary table
 
 | Rule ID | Severity | Enforces | Blocks conformance? |
 | --- | --- | --- | --- |
@@ -353,7 +397,10 @@ Each rule specification below contains:
 | `level-complete` | info | §2.3 | No |
 | `unknown-check` | info | §7.3 | No |
 | `source-attribution` | warning | §3.2 | No (unless `--strict`) |
-| `fabricated-verdict` | error | §3.1 | Yes |
+| `fabricated-verdict` | error | §3.1, §2.4 | Yes |
+| `stale-verdict` | warning | §8.6 | No (unless `--strict`) |
+| `methodology-ref-present` | error | §7.4 | Yes |
+| `profile-declared` | error | §2.4 | Yes |
 
 ---
 
@@ -556,6 +603,23 @@ These parallels are not citations in the RFC-2119 sense — design.md is a conve
 
 ## Appendix C — Change log
 
+### v0.2-draft — 2026-10-10
+
+Proposal, not yet released.
+
+**Added.**
+
+- Rule 3.11 `stale-verdict` (warning): fires when a check's `measured_at` is older than its measurement type's validity window (lab 90 days, field/connected 60 days). STANDARD.md §8.6.
+- Rule 3.12 `methodology-ref-present` (error): fires when `methodology_ref` is absent at the `full` level. STANDARD.md §7.4.
+- Rule 3.13 `profile-declared` (error): fires when `profile` is absent or invalid at the `standard` or `full` level. STANDARD.md §2.4.
+- Extended `fabricated-verdict` trigger: now also fires for Extended-profile audits missing `scoring.sub_scores`. STANDARD.md §2.4.
+- Rule summary table updated to 13 rules.
+- `level-complete` finding message updated: 17 → 20 required core checks (reflecting v0.1.1 count).
+
+**Breaking changes.** `profile-declared` and `methodology-ref-present` are `error`-severity rules. Any existing v0.1.x audit report validated at `standard` or `full` level without a `profile` field will fail under v0.2 rules. **Migration:** add `"profile": "core"` to any audit report produced by an implementation using only the §6.4 formula.
+
+---
+
 ### v0.1 — 2026-04-23
 
 Initial release of the Validator Specification.
@@ -570,4 +634,4 @@ Initial release of the Validator Specification.
 
 *— End of document —*
 
-*AI Visibility Audit Standard — Validator Specification v0.1 · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23*
+*AI Visibility Audit Standard — Validator Specification v0.2-draft · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23 · Updated 2026-10-10*

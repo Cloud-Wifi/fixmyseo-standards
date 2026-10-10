@@ -1,5 +1,5 @@
 ---
-version: "0.1"
+version: "0.2-draft"
 name: AI Visibility Audit Standard
 description: >
   Open specification for producing conformant audits of AI search
@@ -401,6 +401,15 @@ This standard does not:
 - Define a methodology for directly querying generative AI platforms to measure citation rates. That measurement is valuable but depends on unstable third-party APIs and is deferred to a future version.
 - Supersede existing web standards. It references W3C, WHATWG, IETF, and schema.org specifications; it does not replace them.
 
+The following concerns are permanently out of the normative scope of this standard. They are implementation decisions and MUST NOT be encoded as conformance requirements in any version of this document:
+
+- **Responsiveness targets.** How quickly an implementation must detect a change and re-audit.
+- **AFR loop mechanics.** The Automated Fix & Retry cycle — when fixes are deployed, how deployment is verified, and when a follow-up audit is triggered.
+- **Label bands.** The mapping of numeric scores to qualitative labels (e.g., "Good", "Needs Work", "Critical"). Label vocabulary and band boundaries are implementation-defined.
+- **Display rules.** How implementations render scores, badges, sub-score breakdowns, or confidence indicators to end users.
+- **Scan cadences.** The frequency at which implementations re-audit a domain.
+- **Score-change communications.** What notifications or messages an implementation sends when an audit score changes.
+
 ### 1.4 Relationship to other standards
 
 This standard builds on and references, without modifying, the following:
@@ -458,6 +467,33 @@ An audit report that claims conformance MUST declare its level. The three levels
 **Full.** The `standard` level, plus: every check contains the evidence fields declared as `evidence_required`; scoring is present and reproducible from the verdicts using the formulas defined in this document; methodology metadata (engine version, data sources, timestamps per external lookup) is present and complete.
 
 An implementation MAY submit audits at any level. An implementation claiming `full` conformance MUST produce audits that reconcile against the validator with zero errors at the `full` level.
+
+### 2.4 Conformance profiles
+
+This standard defines two **conformance profiles** that describe distinct scoring models. A conformant audit report MUST declare its profile. The `profile` field is required at the `standard` and `full` conformance levels.
+
+#### Core profile
+
+The Core profile corresponds to the formula defined in §6.4 and §6.5: the twenty lab checks defined in this document, scored as `sum(earned) / sum(possible) * 95` per pillar, with a hard pillar cap of **95**.
+
+- The Core profile is suitable for any conformant implementation operating solely from a page crawl.
+- Sub-score breakdowns, field-data enrichment, and weighted renormalization are not applicable within the Core profile.
+- A Core-profile audit report with all checks passing produces a maximum score of 95. A score of 96–100 is not achievable under Core. An implementation that produces a Core-profile score above 95 is non-conformant.
+
+#### Extended profile
+
+The Extended profile supplements the Core checks with a sub-score family, field-data inputs, and weight renormalization (B2: exclusion of null sub-scores from the weighted denominator). The pillar cap for Extended is **100**.
+
+- The Extended profile is an additive layer. It MUST include all Core checks and MUST NOT contradict Core check verdicts.
+- Sub-scores are defined by the implementing engine and MUST be included in audit output as `scoring.sub_scores`.
+- Field-data sub-scores (those derived from external lookups rather than synthetic crawl) MUST carry `measurement_type: field` in their sub-score metadata.
+- Weight renormalization under Extended: sub-scores with null input data are excluded from both the numerator and denominator of the weighted average (see §6.4 for the Core formula; the Extended formula substitutes active sub-score weight sums).
+- The Extended profile allows scores above 95 because sub-score enrichment can provide evidence that the Core checks — being structural proxies — undercount. An Extended-profile score reflects a richer measurement model, not a relaxed standard.
+- A fabricated Extended-profile score — one that claims Extended scoring without providing the required sub-score data — is a conformance violation.
+
+#### Profile declaration
+
+The `profile` field MUST be one of `"core"` or `"extended"` and MUST appear at the top level of the audit report alongside `standard_version`. Validator rule `profile-declared` (VALIDATOR.md §3.13) enforces this requirement.
 
 ---
 
@@ -1069,6 +1105,8 @@ No implementation achieves 100 on this standard, by design. The pillar cap of 95
 
 The gap between 95 and 100 is the gap between this standard and the truth. It is not a flaw; it is an acknowledgement. Any tool that produces 100/100 scores is overclaiming.
 
+**Core/Extended cap asymmetry.** The Core profile cap of 95 and the Extended profile cap of 100 are intentionally different. This asymmetry reflects a difference in model completeness, not a difference in standards. Core measures structural eligibility from a synthetic crawl; the 95 cap acknowledges the remaining unmeasured factors. Extended incorporates sub-score families and field-data enrichment that reduce (but do not eliminate) that gap; the 100 cap reflects the Extended model's broader coverage, not a claim that a 100-scoring site achieves perfect AI visibility. A 100 under Extended and a 95 under Core are not the same claim, and implementations MUST NOT present them equivalently. See §2.4 and ADR Decision 16.
+
 ---
 
 ## 7. Audit report format
@@ -1155,6 +1193,33 @@ The `overall_score_semantics` requirement exists to prevent the score from being
 
 Implementations MAY include additional checks beyond the twenty defined here. Such checks MUST be namespaced outside the three pillar prefixes (for example, `ext.vendor.custom_check`). Non-standard checks MUST NOT contribute to pillar or overall scores. A validator encountering a non-standard check will emit an `info`-severity finding, not an error.
 
+### 7.4 Confidence and methodology reference
+
+At the `full` conformance level, audit reports MUST include two additional top-level fields: `confidence` and `methodology_ref`.
+
+**`confidence`** is a string enum with two values:
+
+- `"high"` — all in-scope checks at the claimed conformance level were evaluated with their primary detection method; no `not_checked` verdicts appear for reasons attributable to implementation limitations (network error and unauthenticated-mode `connected` checks are exempt).
+- `"low"` — one or more in-scope checks were evaluated with a proxy or fallback detection method, or the audit is partial (see §8.2) for reasons beyond the defined exemptions.
+
+Implementations MAY define sub-levels (e.g., `"medium"`) in their own schema extensions, but MUST map to `"high"` or `"low"` in the standard `confidence` field for cross-implementation comparability.
+
+**`methodology_ref`** is a string in the format `"<engine-id>/v<major>.<minor>"` that identifies the scoring engine and version used to produce the audit. The reference MUST be stable: the same `methodology_ref` value MUST produce the same score from the same verdicts on any conformant implementation declaring it. When the scoring methodology changes materially — new weights, new sub-score families, a changed pillar formula — the `methodology_ref` MUST be incremented.
+
+Example:
+
+```json
+{
+  "standard_version": "0.1",
+  "profile": "extended",
+  "confidence": "high",
+  "methodology_ref": "seo-scoring/v0.1",
+  ...
+}
+```
+
+Validator rule `methodology-ref-present` (VALIDATOR.md §3.12) enforces the presence of `methodology_ref` at the `full` level. The `confidence` field is required at `full`; at `standard` it is optional but RECOMMENDED.
+
 ---
 
 ## 8. Truncation and confidence
@@ -1181,6 +1246,40 @@ The minimum data required to produce a meaningful score is:
 - Coverage of at least one `high`-impact check.
 
 An implementation SHOULD refuse to emit a score for audits below this threshold, and SHOULD emit only the individual check verdicts, with a note that the score is not computable.
+
+### 8.5 Per-check `measured_at`
+
+At the `full` conformance level, every check entry MUST include a `measured_at` field: an ISO 8601 timestamp recording when the check's primary evidence was collected. This is distinct from the top-level `timestamp`, which records when the audit report was assembled.
+
+`measured_at` is particularly important for checks that involve external lookups (`external_lookup` and `gbp_api` detection methods), where the evidence may have been cached or collected in a prior session. For `lab` checks performed in a single synchronous crawl, `measured_at` MAY equal the top-level `timestamp`.
+
+Example:
+
+```json
+"geo.directory_presence": {
+  "verdict": "pass",
+  "measured_at": "2026-05-20T10:30:14Z",
+  "evidence": { ... }
+}
+```
+
+The `measured_at` field enables downstream consumers to detect stale verdicts (see §8.6) and to reconstruct the audit's evidence freshness profile.
+
+### 8.6 Verdict validity windows
+
+A verdict's evidentiary basis expires after a defined period. A verdict whose `measured_at` exceeds its validity window is **stale**. Stale verdicts MUST NOT be presented as current without explicit disclosure.
+
+Validity windows by measurement type:
+
+| Measurement type | Validity window |
+|---|---|
+| `lab` | 90 days |
+| `field` | 60 days |
+| `connected` | 60 days |
+
+An audit report containing one or more stale verdicts (at the time of consumption, not at the time of report generation) MUST be flagged by the validator with the `stale-verdict` finding (VALIDATOR.md §3.11). Implementations consuming stored audit reports MUST check `measured_at` against the consumption timestamp before presenting scores.
+
+A re-audit that refreshes some but not all checks produces a partial-freshness report. Such a report MUST declare `confidence: "low"` (§7.4) regardless of the verdict distribution.
 
 ---
 
@@ -1292,6 +1391,34 @@ An implementation MAY declare additional directories and include them in evidenc
 
 ## Appendix B — Change log
 
+### v0.2-draft — 2026-10-10
+
+Proposal. Not yet released. Changes listed here are open for review and subject to revision.
+
+**Added.**
+
+- §1.3 Non-goals extended with a permanent out-of-scope list: responsiveness targets, AFR loop mechanics, label bands, display rules, scan cadences, and score-change communications are non-normative and MUST NOT be encoded as conformance requirements (D5 — scope guardrails).
+- §2.4 Conformance profiles: Core and Extended. Core uses the twenty lab checks with the existing formula and cap 95. Extended adds sub-score families, field-data inputs, and weight renormalization with cap 100. `profile` field required at `standard` and `full` levels. Resolves the two-model ambiguity identified in ADR Decision 16 (D3).
+- §6.7 Core/Extended cap asymmetry note: explains that 95 (Core) and 100 (Extended) are not equivalent claims and MUST NOT be presented as such (D4).
+- §7.4 `confidence` and `methodology_ref` as required fields at the `full` conformance level. `confidence: "high" | "low"` encodes whether the primary detection method was used for all in-scope checks. `methodology_ref` is a stable engine-version identifier; it MUST be incremented when the scoring methodology changes (D2).
+- §8.5 Per-check `measured_at` field: ISO 8601 timestamp of evidence collection, required at the `full` level. Enables downstream consumers to detect stale verdicts independently of the top-level report timestamp (D1).
+- §8.6 Verdict validity windows: `lab` 90 days, `field` and `connected` 60 days. Verdicts exceeding their window are stale; validator rule `stale-verdict` flags them. Partial-freshness reports (some checks refreshed, others stale) MUST declare `confidence: "low"` (D1).
+- VALIDATOR.md: rules `stale-verdict` (3.11), `methodology-ref-present` (3.12), `profile-declared` (3.13). Rule summary table updated.
+- `audit-report.schema.json`: `profile`, `measured_at`, `confidence`, `methodology_ref` properties added.
+- ADR Decision 16 (methodology-adr/v0.1.md): conformance profiles rationale and consequences.
+
+**Changed.**
+
+- Front matter `version` bumped to `"0.2-draft"`. This document supersedes v0.1.1 when ratified.
+- §2.3 Conformance levels prose unchanged; §2.4 is a new additive section.
+- Appendix B: this entry.
+
+**Breaking changes.** `profile` is required at `standard` and `full` levels; existing v0.1.x audit reports lacking `profile` will fail the `profile-declared` validator rule under v0.2. **Migration:** add `"profile": "core"` to any existing audit report that uses the §6.4 formula.
+
+**Migration guide.** Implementations using only the §6.4/§6.5 scoring formula declare `"profile": "core"`. Implementations using sub-score families with weight renormalization declare `"profile": "extended"`. No check IDs, verdict vocabulary, impact bands, or pillar assignments have changed.
+
+---
+
 ### v0.1.1 — 2026-05-20
 
 Documentation updates.
@@ -1386,4 +1513,4 @@ Conformant implementations MUST return `not_checked` for `connected` checks when
 
 *— End of document —*
 
-*AI Visibility Audit Standard v0.1.1 · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23 · Updated 2026-05-20*
+*AI Visibility Audit Standard v0.2-draft · Cloud WiFi Limited · CC-BY 4.0 · Published 2026-04-23 · Updated 2026-10-10*

@@ -7,6 +7,36 @@ Specifications use a `v{major}.{minor}` version scheme (see GOVERNANCE.md §3).
 
 ---
 
+## [v0.2-draft] — 2026-10-10
+
+Proposal. Pending ratification. Changes listed here represent the Phase D standard refinements and are open for review.
+
+### Added
+
+- **D5 — Scope guardrails (STANDARD.md §1.3):** Permanent out-of-scope list added to §1.3 Non-goals. The following are non-normative and MUST NOT become conformance requirements in any version: responsiveness targets, AFR loop mechanics, label bands, display rules, scan cadences, score-change comms.
+- **D3 — Conformance profiles (STANDARD.md §2.4):** New §2.4 defines Core and Extended conformance profiles. Core = twenty lab checks, `sum(earned)/sum(possible) * 95`, pillar cap 95. Extended = sub-score families, field data, weight renormalisation, cap 100. `profile` field required at `standard` and `full` levels. Resolves two-model ambiguity (see ADR Decision 16 in `methodology-adr/v0.1.md`).
+- **D4 — Core/Extended cap asymmetry (STANDARD.md §6.7):** Note added clarifying that 95 (Core) and 100 (Extended) are not equivalent claims. Implementations MUST NOT present them equivalently.
+- **D2 — `confidence` and `methodology_ref` (STANDARD.md §7.4):** New §7.4 makes `confidence` (`"high"` | `"low"`) and `methodology_ref` (engine-id/version string) required fields at the `full` conformance level. `methodology_ref` MUST be incremented when the scoring methodology changes materially.
+- **D1 — Per-check `measured_at` (STANDARD.md §8.5):** New §8.5 requires each check entry to include `measured_at` (ISO 8601) at the `full` level, recording when that check's evidence was collected.
+- **D1 — Verdict validity windows (STANDARD.md §8.6):** New §8.6 defines validity windows by measurement type: lab 90 days, field/connected 60 days. Stale verdicts MUST be disclosed. Partial-freshness audits MUST declare `confidence: "low"`.
+- **D3 — ADR Decision 16 (methodology-adr/v0.1.md):** Conformance profiles rationale, alternatives considered, consequences (profile-declared, fabricated-verdict extended, Core 95/Extended 100 asymmetry, stale-verdict rules).
+- **VALIDATOR.md rules 3.11–3.13:** `stale-verdict` (warning, §8.6), `methodology-ref-present` (error, §7.4), `profile-declared` (error, §2.4). Rule summary table updated to 13 rules.
+- **audit-report.schema.json:** `profile`, `confidence`, `methodology_ref`, `measured_at`, `scoring.sub_scores` properties added. `standard_version` extended to enum `["0.1", "0.2-draft"]`. Score maximums updated to 100 for Extended profile compatibility.
+
+### Resolved
+
+- **OD3 — freshness floor:** 0.30 (spec value wins; supersedes ADR #9 which stated 0.40).
+
+### Breaking changes
+
+- `profile` field required at `standard` and `full` conformance levels. Existing v0.1.x audits lacking `profile` will fail the `profile-declared` validator rule.
+
+### Migration guide
+
+Add `"profile": "core"` to any existing audit report produced by an implementation using only the §6.4 formula. Implementations using sub-score families with weight renormalisation declare `"profile": "extended"`.
+
+---
+
 ## [v0.1.2] — 2026-09-09
 
 Spec erratum. No weight values, measurement procedures, or verdict definitions changed.
